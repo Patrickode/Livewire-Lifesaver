@@ -19,7 +19,25 @@ public class PlayerMovement : MonoBehaviour
     public float accelSpeed = 1;
     public float jumpPower = 5;
 
-    void Update()
+    private void Start()
+    {
+        if (!rb)
+        {
+            rb = GetComponent<Rigidbody>();
+        }
+        
+        if (!coll)
+        {
+            coll = GetComponent<Collider>();
+        }
+
+        if (!orienter)
+        {
+            orienter = GameObject.FindWithTag("Orienter");
+        }
+    }
+
+    void FixedUpdate()
     {
         //Set up a movement vector.
         Vector3 moveDir = Vector3.zero;
