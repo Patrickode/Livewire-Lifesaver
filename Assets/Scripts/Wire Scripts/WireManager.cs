@@ -29,7 +29,7 @@ public class WireManager : MonoBehaviour
         current = GameObject.FindWithTag("Current");
         if (!current)
         {
-            throw new MissingReferenceException("No current was found. Add a current prefab to the scene.");
+            Debug.LogError("No current was found. Add a current to the scene.");
         }
 
         currentIndex = 0;
@@ -42,29 +42,33 @@ public class WireManager : MonoBehaviour
 
     void Update()
     {
-        //If the current isn't transitioning between wires,
-        if (!currentTransition)
+        //If the current hasn't been destroyed for whatever reason / isn't missing,
+        if (current)
         {
-            //Move the current to towards its destination, the end of the wire it's on.
-            current.transform.position = Vector3.MoveTowards
-                (
-                    current.transform.position,
-                    wireList[currentIndex].end.position,
-                    currentSpeed * Time.deltaTime
-                );
-
-            //If the current is at the end of the current wire...
-            if (current.transform.position.Equals(wireList[currentIndex].end.position))
+            //If the current isn't transitioning between wires,
+            if (!currentTransition)
             {
-                //Go to the next wire and do all relevant logic.
-                GoToNextWire();
+                //Move the current to towards its destination, the end of the wire it's on.
+                current.transform.position = Vector3.MoveTowards
+                    (
+                        current.transform.position,
+                        wireList[currentIndex].end.position,
+                        currentSpeed * Time.deltaTime
+                    );
+
+                //If the current is at the end of the current wire...
+                if (current.transform.position.Equals(wireList[currentIndex].end.position))
+                {
+                    //Go to the next wire and do all relevant logic.
+                    GoToNextWire();
+                }
             }
-        }
-        //If the current IS transitioning between wires,
-        else
-        {
-            //Move through the gap at a speed dictated by transitionSpeed.
-            DoCurrentTransition();
+            //If the current IS transitioning between wires,
+            else
+            {
+                //Move through the gap at a speed dictated by transitionSpeed.
+                DoCurrentTransition();
+            } 
         }
     }
 
@@ -84,6 +88,7 @@ public class WireManager : MonoBehaviour
             }
             else
             {
+                Destroy(current);
                 //TODO: Initiate lose
                 currentIndex += 10;
             }
