@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class LevelClear : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Current"))
+        if (other.CompareTag("Finish"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }

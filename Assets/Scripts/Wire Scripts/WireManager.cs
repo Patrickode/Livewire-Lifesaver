@@ -89,8 +89,7 @@ public class WireManager : MonoBehaviour
             else
             {
                 Destroy(current);
-                //TODO: Initiate lose
-                currentIndex += 10;
+                //TODO: Initiate lose sequence
             }
         }
     }
