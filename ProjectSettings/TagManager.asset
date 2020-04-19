@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Orienter
   - Current
-  - Waypoint
   layers:
   - Default
   - TransparentFX

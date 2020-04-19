@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSpeed: 1
-  transitionLength: 0.25
+  transitionLength: 0.35
