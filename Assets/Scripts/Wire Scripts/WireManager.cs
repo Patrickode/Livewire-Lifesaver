@@ -16,8 +16,13 @@ public class WireManager : MonoBehaviour
 
     private GameObject current;
     private int currentIndex;
-    private bool currentTransition;
 
+
+    private GameObject player;
+    /// <summary>
+    /// Whether the current is transitioning between wires right now.
+    /// </summary>
+    private bool currentTransitioning;
     /// <summary>
     /// How long a transition between wires should take in seconds.
     /// </summary>
@@ -27,10 +32,10 @@ public class WireManager : MonoBehaviour
     void Start()
     {
         current = GameObject.FindWithTag("Current");
-        if (!current)
-        {
-            Debug.LogError("No current was found. Add a current to the scene.");
-        }
+        if (!current) { Debug.LogError("No current was found. Add a current to the scene."); }
+
+        player = GameObject.FindWithTag("Player");
+        if (!current) { Debug.LogError("No player was found. Add a player to the scene."); }
 
         currentIndex = 0;
 
@@ -46,7 +51,7 @@ public class WireManager : MonoBehaviour
         if (current)
         {
             //If the current isn't transitioning between wires,
-            if (!currentTransition)
+            if (!currentTransitioning)
             {
                 //Move the current to towards its destination, the end of the wire it's on.
                 current.transform.position = Vector3.MoveTowards
@@ -68,7 +73,7 @@ public class WireManager : MonoBehaviour
             {
                 //Move through the gap at a speed dictated by transitionSpeed.
                 DoCurrentTransition();
-            } 
+            }
         }
     }
 
@@ -84,7 +89,7 @@ public class WireManager : MonoBehaviour
             if (wireList[currentIndex - 1].playerClose)
             {
                 //current.transform.position = wireList[currentIndex].start.position;
-                currentTransition = true;
+                currentTransitioning = true;
             }
             else
             {
@@ -105,9 +110,12 @@ public class WireManager : MonoBehaviour
         float percentTravelled = 1 / (60 * transitionLength) * transitionProgress;
 
         //Move it to the start of the next wire in roughly transitionLength seconds.
-        current.transform.position = Vector3.Lerp
+        //Follow a path from the end of the last wire, to the player, to the next wire.
+        //It's like it's arcing through the connection the player makes between the wires.
+        current.transform.position = ThreePointLerp
             (
                 wireList[currentIndex - 1].end.position,
+                player.transform.position,
                 wireList[currentIndex].start.position,
                 percentTravelled
             );
@@ -116,7 +124,25 @@ public class WireManager : MonoBehaviour
         {
             current.transform.position = wireList[currentIndex].start.position;
             transitionProgress = 0;
-            currentTransition = false;
+            currentTransitioning = false;
+        }
+    }
+
+    /// <summary>
+    /// Linearly interpolates a position on the lines mid - start or end - mid.
+    /// </summary>
+    /// <param name="t">The percentage of the way from start to end.</param>
+    /// <returns>A point on one of the lines mid - start or end - mid, that is t percent along
+    /// the line of start - end.</returns>
+    private Vector3 ThreePointLerp(Vector3 start, Vector3 mid, Vector3 end, float t)
+    {
+        if (t <= 0.5f)
+        {
+            return Vector3.Lerp(start, mid, t * 2f);
+        }
+        else
+        {
+            return Vector3.Lerp(mid, end, t);
         }
     }
 }
