@@ -7,7 +7,7 @@ public class WireManager : MonoBehaviour
     /// <summary>
     /// An array of all the wires in the level. These are in sequential order.
     /// </summary>
-    Wire[] wireList;
+    public static List<Wire> wireList = new List<Wire>();
 
     /// <summary>
     /// The speed of the current as it moves along the wire, roughly in units per frame.
@@ -20,10 +20,17 @@ public class WireManager : MonoBehaviour
     void Start()
     {
         current = GameObject.FindWithTag("Current");
+        if (!current)
+        {
+            throw new MissingReferenceException("No current was found. Add a current prefab to the scene.");
+        }
 
         currentIndex = 0;
-        wireList = FindObjectsOfType<Wire>();
-        System.Array.Reverse(wireList);
+
+        //The wires add themselves to the list as they're enabled, but order isn't guaranteed.
+        //We need to sort the list so the wires are in order, according to their order variable.
+        //The lambda function returns whether wire1 should go before wire2.
+        wireList.Sort((wire1, wire2) => wire1.order.CompareTo(wire2.order));
     }
 
     void Update()
