@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2079256108}
   - component: {fileID: 2079256109}
+  - component: {fileID: 5198365488250870757}
   m_Layer: 0
   m_Name: Gap Trigger
   m_TagString: Untagged
@@ -44,6 +45,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5198365488250870757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079256107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f7775a86963b6844bcc4325adc63f76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentWire: {fileID: 1215729932297674154}
 --- !u!1 &7881058142445945125
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,3 +226,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8877751717750334562}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1215729932297674154 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7776379309844265416, guid: a8194830258447346bc2ca2829f1d4bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8877751717750334562}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c594f6860a3483d4b86860241e5dcddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

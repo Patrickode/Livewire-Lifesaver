@@ -40,9 +40,17 @@ public class WireManager : MonoBehaviour
         if (current.transform.position.Equals(wireList[currentIndex].end.position))
         {
             currentIndex++;
-            if (wireList[currentIndex].type == WireType.Broken)
+            if (wireList[currentIndex - 1].type == WireType.Broken)
             {
-
+                if (wireList[currentIndex - 1].playerClose)
+                {
+                    current.transform.position = wireList[currentIndex].start.position;
+                }
+                else
+                {
+                    //TODO: Initiate lose
+                    currentIndex += 10;
+                }
             }
         }
     }
