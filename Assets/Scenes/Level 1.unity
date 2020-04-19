@@ -289,7 +289,7 @@ Transform:
   m_GameObject: {fileID: 48321343}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -5.5}
-  m_LocalScale: {x: 12, y: 5, z: 1}
+  m_LocalScale: {x: 12, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 445567394}
   m_RootOrder: 1
@@ -643,7 +643,7 @@ Transform:
   m_GameObject: {fileID: 796469364}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 5.5, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 5, z: 1}
+  m_LocalScale: {x: 10, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 445567394}
   m_RootOrder: 3
@@ -922,7 +922,7 @@ Transform:
   m_GameObject: {fileID: 1453266936}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 5.5}
-  m_LocalScale: {x: 12, y: 5, z: 1}
+  m_LocalScale: {x: 12, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 445567394}
   m_RootOrder: 4
@@ -1089,7 +1089,7 @@ Transform:
   m_GameObject: {fileID: 1849541393}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -5.5, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 5, z: 1}
+  m_LocalScale: {x: 10, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 445567394}
   m_RootOrder: 2
@@ -1676,11 +1676,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 8404675213286592616, guid: b512f4094c5f39944a2d13c032c29ae2,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 451c706d980d3c045a8c2985151bf5bc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b512f4094c5f39944a2d13c032c29ae2, type: 3}
 --- !u!1001 &8662961001659236564
@@ -1749,16 +1744,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8662961000165537293, guid: dc9e82f1a2a8b6c489bcf7c3942dd7cd,
-        type: 3}
-      propertyPath: currentSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8662961000165537293, guid: dc9e82f1a2a8b6c489bcf7c3942dd7cd,
-        type: 3}
-      propertyPath: transitionLength
-      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc9e82f1a2a8b6c489bcf7c3942dd7cd, type: 3}
