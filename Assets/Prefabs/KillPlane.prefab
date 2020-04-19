@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4424758910931098415}
   - component: {fileID: 4424758910931098414}
   - component: {fileID: 4424758910931098413}
-  - component: {fileID: 4424758910931098412}
+  - component: {fileID: 6846921280487615610}
   m_Layer: 0
   m_Name: KillPlane
   m_TagString: Untagged
@@ -55,7 +55,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &4424758910931098412
+--- !u!114 &6846921280487615610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,6 +64,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4424758910931098411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf58fab74ed34664295cc8f459e3cffb, type: 3}
+  m_Script: {fileID: 11500000, guid: e6615e8a77bd06844ae76813c1a3cfb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

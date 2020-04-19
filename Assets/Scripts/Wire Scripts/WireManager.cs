@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WireManager : MonoBehaviour
 {
@@ -94,7 +95,7 @@ public class WireManager : MonoBehaviour
             else
             {
                 Destroy(current);
-                //TODO: Initiate lose sequence
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
     }

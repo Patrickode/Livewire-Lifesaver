@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerDeath : MonoBehaviour
+public class VoidOut : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
