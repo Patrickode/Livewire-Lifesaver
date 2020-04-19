@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
         //Now apply that move direction to actual movement.
         if (moveDir != Vector3.zero)
         {
-            ApplyMoveInput(moveDir);
+            MoveLaterally(moveDir);
         }
     }
 
@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     /// Applies velocity in the given direction.
     /// </summary>
     /// <param name="forceDir">The direction to move in.</param>
-    private void ApplyMoveInput(Vector3 forceDir)
+    private void MoveLaterally(Vector3 forceDir)
     {
         //Get the velocity without a y component, make a clamped speed vector, and apply it to velocity.
         //This effectively ignores the y axis of velocity, allowing normal gravity things to happen.

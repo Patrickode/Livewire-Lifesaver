@@ -19,6 +19,10 @@ public class DetectPlayer : MonoBehaviour
                 parentWire.type == WireType.Broken ? parentWire.end.position : parentWire.start.position
             );
         line.enabled = false;
+
+        //Using world space in the editor offsets the entire wire prefab's transform in funky, enigmatic ways.
+        //The solution is to turn it off until runtime.
+        line.useWorldSpace = true;
     }
 
     private void Update()
