@@ -21,19 +21,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        if (!rb)
-        {
-            rb = GetComponent<Rigidbody>();
-        }
-        
-        if (!coll)
-        {
-            coll = GetComponent<Collider>();
-        }
-
+        //If an orienter wasn't assigned in the inspector,
         if (!orienter)
         {
+            //Find the orienter in the scene.
             orienter = GameObject.FindWithTag("Orienter");
+
+            //If orienter is still null, no orienter was found in the scene.
+            if (!orienter)
+            {
+                Debug.LogError("PlayerMovement: No orienter was assigned or found. " +
+                    "Manually assign an orienter or add one to the scene with tag \"Orienter.\"");
+            }
         }
     }
 

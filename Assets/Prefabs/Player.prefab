@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3592eaa239703364d97a38cc7f066283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  coll: {fileID: 0}
+  rb: {fileID: 8404675213198702977}
+  coll: {fileID: 8404675213198702981}
   orienter: {fileID: 0}
   maxVelocity: 3.5
   accelSpeed: 1

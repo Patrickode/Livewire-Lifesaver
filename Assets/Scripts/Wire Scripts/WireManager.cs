@@ -32,10 +32,10 @@ public class WireManager : MonoBehaviour
     void Start()
     {
         current = GameObject.FindWithTag("Current");
-        if (!current) { Debug.LogError("No current was found. Add a current to the scene."); }
+        if (!current) { Debug.LogError("WireManager: No current was found. Add a current to the scene."); }
 
         player = GameObject.FindWithTag("Player");
-        if (!current) { Debug.LogError("No player was found. Add a player to the scene."); }
+        if (!player) { Debug.LogError("WireManager: No player was found. Add a player to the scene."); }
 
         currentIndex = 0;
 

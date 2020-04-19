@@ -26,11 +26,11 @@ public class DetectPlayer : MonoBehaviour
         //Make sure the line is only seen when the player is close.
         line.enabled = parentWire.playerClose;
 
-        //If the player is close, and we have a reference to the player (we should), update the end
-        //position to be the player's position.
-        if (parentWire.playerClose)
+        //If the player is close, and we have a reference to the player (we should, see on trigger enter),
+        //update the end position to be the player's position.
+        if (parentWire.playerClose && player)
         {
-            if (player) { line.SetPosition(1, player.position); }
+            line.SetPosition(1, player.position);
         }
     }
 
