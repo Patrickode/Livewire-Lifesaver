@@ -48,7 +48,7 @@ public class WireManager : MonoBehaviour
     void Update()
     {
         //If the current hasn't been destroyed for whatever reason / isn't missing,
-        if (current)
+        if (current && wireList.Count > 0 && currentIndex < wireList.Count)
         {
             //If the current isn't transitioning between wires,
             if (!currentTransitioning)
