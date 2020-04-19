@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    [HideInInspector] public Transform start;
-    [HideInInspector] public Transform end;
+    public Transform start;
+    public Transform end;
+    public GameObject gapTrigger;
     public WireType type;
 
     private void OnEnable()
     {
-        start = transform.GetChild(0);
-        end = transform.GetChild(transform.childCount - 1);
-
-        WireManager.wireList.Add(this);
+        //WireManager.wireList.Add(this);
     }
 
     private void OnDisable()
     {
-        WireManager.wireList.Remove(this);
+        //WireManager.wireList.Remove(this);
     }
 }

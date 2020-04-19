@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3072967541183203067}
   m_Layer: 0
-  m_Name: End Waypoint
-  m_TagString: Untagged
+  m_Name: End
+  m_TagString: Waypoint
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3072967542158013804}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: -1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_Children:
   - {fileID: 3072967543001233325}
@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c594f6860a3483d4b86860241e5dcddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: {fileID: 0}
-  end: {fileID: 0}
+  start: {fileID: 3072967543001233325}
+  end: {fileID: 3072967541183203067}
+  gapTrigger: {fileID: 0}
   type: 0
 --- !u!1 &3072967543001233322
 GameObject:
@@ -151,8 +152,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3072967543001233325}
   m_Layer: 0
-  m_Name: Start Waypoint
-  m_TagString: Untagged
+  m_Name: Start
+  m_TagString: Waypoint
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
