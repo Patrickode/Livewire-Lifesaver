@@ -12,7 +12,7 @@ public class WireManager : MonoBehaviour
     /// <summary>
     /// The speed of the current as it moves along the wire, roughly in units per second.
     /// </summary>
-    [Range(0f, 1f)] [SerializeField] private float currentSpeed = 0.5f;
+    [Range(0f, 5f)] [SerializeField] private float currentSpeed = 1f;
 
     private GameObject current;
     private int currentIndex;
