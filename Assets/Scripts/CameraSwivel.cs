@@ -11,11 +11,11 @@ public class CameraSwivel : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Rotate(0, -rotateSpeed, 0);
+            transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Rotate(0, rotateSpeed, 0);
+            transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
         }
     }
 }

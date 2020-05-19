@@ -105,12 +105,11 @@ public class WireManager : MonoBehaviour
     /// </summary>
     private void DoCurrentTransition()
     {
-        transitionProgress++;
+        //Add one step to transition progress.
+        //We want the transition to happen in transitionLength seconds, so one "step" is however many seconds have
+        //passed since last frame over the desired length.
+        transitionProgress += Time.deltaTime / transitionLength;
 
-        //We want the transition to take roughly transitionLength seconds, so we 
-        float percentTravelled = 1 / (60 * transitionLength) * transitionProgress;
-
-        //Move it to the start of the next wire in roughly transitionLength seconds.
         //Follow a path from the end of the last wire, to the player, to the next wire.
         //It's like it's arcing through the connection the player makes between the wires.
         current.transform.position = ThreePointLerp
@@ -118,10 +117,12 @@ public class WireManager : MonoBehaviour
                 wireList[currentIndex - 1].end.position,
                 player.transform.position,
                 wireList[currentIndex].start.position,
-                percentTravelled
+                transitionProgress
             );
 
-        if (percentTravelled >= 1)
+        //Once the transition has completed, set the current's position as a failsafe, reset transitionProgress,
+        //and not that the transition has ended.
+        if (transitionProgress >= 1)
         {
             current.transform.position = wireList[currentIndex].start.position;
             transitionProgress = 0;
