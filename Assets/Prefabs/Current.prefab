@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7073486929874105324}
   - component: {fileID: 482179334}
   - component: {fileID: 482179329}
+  - component: {fileID: -7137718218472559349}
   m_Layer: 0
   m_Name: Current
   m_TagString: Current
@@ -123,3 +124,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecc48fc53f5cf224d8484141a244d667, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7137718218472559349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7073486929874105325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401db8ad6f44173429bc489596a3418b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSpeed: 1
+  transitionLength: 0.15
