@@ -144,7 +144,8 @@ public class WireManager : MonoBehaviour
         }
         else
         {
-            return Vector3.Lerp(mid, end, t);
+            float secondHalfT = Mathf.InverseLerp(0.5f, 1f, t);
+            return Vector3.Lerp(mid, end, secondHalfT);
         }
     }
 }
