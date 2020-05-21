@@ -5,15 +5,15 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody rb;
+    private Rigidbody rb = null;
     [SerializeField]
-    private Collider coll;
+    private Collider coll = null;
 
     /// <summary>
     /// The object to reference when moving "forward," "left," "backward," or "right."
     /// </summary>
     [SerializeField]
-    private GameObject orienter;
+    private GameObject orienter = null;
 
     public float maxVelocity = 5;
     public float accelSpeed = 1;

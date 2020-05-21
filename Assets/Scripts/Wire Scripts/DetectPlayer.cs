@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class DetectPlayer : MonoBehaviour
 {
-    [SerializeField] private Wire parentWire;
-    [SerializeField] private LineRenderer line;
-    private Transform player;
+    [SerializeField] private Wire parentWire = null;
+    [SerializeField] private LineRenderer line = null;
+    private Transform player = null;
 
     private void Start()
     {
