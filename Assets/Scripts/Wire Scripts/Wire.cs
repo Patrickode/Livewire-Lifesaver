@@ -12,11 +12,11 @@ public class Wire : MonoBehaviour
 
     private void OnEnable()
     {
-        WireManager.wireList.Add(this);
+        WireManager.AddWire(this);
     }
 
     private void OnDisable()
     {
-        WireManager.wireList.Remove(this);
+        WireManager.RemoveWire(this);
     }
 }

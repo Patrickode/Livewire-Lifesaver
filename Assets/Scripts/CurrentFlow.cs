@@ -34,16 +34,13 @@ public class CurrentFlow : MonoBehaviour
 
         currentIndex = 0;
 
-        //The wires add themselves to the list as they're enabled, but order isn't guaranteed.
-        //We need to sort the list so the wires are in order, according to their order variable.
-        //The lambda function returns whether wire1 should go before wire2.
-        WireManager.wireList.Sort((wire1, wire2) => wire1.order.CompareTo(wire2.order));
+        WireManager.SortWires();
     }
 
     void Update()
     {
-        //If the current hasn't been destroyed for whatever reason / isn't missing,
-        if (WireManager.wireList.Count > 0 && currentIndex < WireManager.wireList.Count)
+        //If there are wires to follow in the level and if we're not past the last wire,
+        if (WireManager.GetCount() > 0 && currentIndex < WireManager.GetCount())
         {
             //If the current isn't transitioning between wires,
             if (!currentTransitioning)
@@ -52,12 +49,12 @@ public class CurrentFlow : MonoBehaviour
                 transform.position = Vector3.MoveTowards
                     (
                         transform.position,
-                        WireManager.wireList[currentIndex].end.position,
+                        WireManager.GetWire(currentIndex).end.position,
                         currentSpeed * Time.deltaTime
                     );
 
                 //If the current is at the end of the current wire...
-                if (transform.position.Equals(WireManager.wireList[currentIndex].end.position))
+                if (transform.position.Equals(WireManager.GetWire(currentIndex).end.position))
                 {
                     //Go to the next wire and do all relevant logic.
                     GoToNextWire();
@@ -82,10 +79,10 @@ public class CurrentFlow : MonoBehaviour
         currentIndex++;
 
         //If the wire the current was on just a second ago was broken...
-        if (WireManager.wireList[currentIndex - 1].type == WireType.Broken)
+        if (WireManager.GetWire(currentIndex - 1).type == WireType.Broken)
         {
             //The player needs to be close for the current to get to the next wire.
-            if (WireManager.wireList[currentIndex - 1].playerClose)
+            if (WireManager.GetWire(currentIndex - 1).playerClose)
             {
                 currentTransitioning = true;
             }
@@ -112,9 +109,9 @@ public class CurrentFlow : MonoBehaviour
         //It's like it's arcing through the connection the player makes between the wires.
         transform.position = ThreePointLerp
             (
-                WireManager.wireList[currentIndex - 1].end.position,
+                WireManager.GetWire(currentIndex - 1).end.position,
                 player.transform.position,
-                WireManager.wireList[currentIndex].start.position,
+                WireManager.GetWire(currentIndex).start.position,
                 transitionProgress
             );
 
@@ -122,7 +119,7 @@ public class CurrentFlow : MonoBehaviour
         //and not that the transition has ended.
         if (transitionProgress >= 1)
         {
-            transform.position = WireManager.wireList[currentIndex].start.position;
+            transform.position = WireManager.GetWire(currentIndex).start.position;
             transitionProgress = 0;
             currentTransitioning = false;
         }
