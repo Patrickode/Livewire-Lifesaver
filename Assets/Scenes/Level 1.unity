@@ -443,7 +443,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: Wire (1)
+      value: Wire
       objectReference: {fileID: 0}
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
@@ -903,7 +903,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: Wire
+      value: End Wire
       objectReference: {fileID: 0}
     - target: {fileID: 7776379309844265416, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
@@ -1237,7 +1237,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: Wire
+      value: Start Wire
       objectReference: {fileID: 0}
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
