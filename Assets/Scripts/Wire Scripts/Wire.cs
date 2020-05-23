@@ -7,6 +7,7 @@ public class Wire : MonoBehaviour
     public int order;
     public Transform start;
     public Transform end;
+    public Transform trigger;
     public WireType type;
     [HideInInspector] public bool playerClose;
 

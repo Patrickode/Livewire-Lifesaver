@@ -191,7 +191,7 @@ PrefabInstance:
     - target: {fileID: 5949104105182869243, guid: e3f212cfb90c5ce41ac240d5df4a776a,
         type: 3}
       propertyPath: m_Name
-      value: Broken Start
+      value: 3b
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f212cfb90c5ce41ac240d5df4a776a, type: 3}
@@ -443,7 +443,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: Wire
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
@@ -668,7 +668,7 @@ PrefabInstance:
     - target: {fileID: 5877553293244059918, guid: d5e4cdb174dd4004994e33f2cd816dfa,
         type: 3}
       propertyPath: m_Name
-      value: Broken End
+      value: 2b
       objectReference: {fileID: 0}
     - target: {fileID: 5877553293244059954, guid: d5e4cdb174dd4004994e33f2cd816dfa,
         type: 3}
@@ -903,7 +903,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: End Wire
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7776379309844265416, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
@@ -1237,7 +1237,7 @@ PrefabInstance:
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
       propertyPath: m_Name
-      value: Start Wire
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3072967542158013804, guid: a8194830258447346bc2ca2829f1d4bb,
         type: 3}
