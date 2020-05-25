@@ -144,11 +144,4 @@ public class WireManager : MonoBehaviour
         //If we got this far, no wire follows thisWire. Return null.
         return null;
     }
-
-    private static void SwapWires(int index1, int index2)
-    {
-        Wire swapper = wireList[index1];
-        wireList[index1] = wireList[index2];
-        wireList[index2] = swapper;
-    }
 }
