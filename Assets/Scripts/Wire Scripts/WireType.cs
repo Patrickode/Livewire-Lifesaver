@@ -5,5 +5,6 @@ using UnityEngine;
 public enum WireType
 {
     Connected,
-    Broken
+    BrokenEnd,
+    BrokenStart
 }

@@ -79,7 +79,7 @@ public class CurrentFlow : MonoBehaviour
         currentIndex++;
 
         //If the wire the current was on just a second ago was broken...
-        if (WireManager.GetWire(currentIndex - 1).type == WireType.Broken)
+        if (WireManager.GetWire(currentIndex - 1).type == WireType.BrokenEnd)
         {
             //The player needs to be close for the current to get to the next wire.
             if (WireManager.GetWire(currentIndex - 1).playerClose)

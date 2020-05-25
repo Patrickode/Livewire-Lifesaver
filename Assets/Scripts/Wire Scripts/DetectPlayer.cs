@@ -10,13 +10,13 @@ public class DetectPlayer : MonoBehaviour
 
     private void Start()
     {
-        //If this wire is broken, set the start of the line to the end of this wire.
-        //Otherwise, set it to the start of this wire.
+        //If this wire is broken at its end, set the start of the line to the end of this wire.
+        //Otherwise, set it to the start of this wire. If this script is present, this wire can't be "connected."
         //This ensures the line originates from the broken side of the wire.
         line.SetPosition
             (
                 0,
-                parentWire.type == WireType.Broken ? parentWire.end.position : parentWire.start.position
+                parentWire.type == WireType.BrokenEnd ? parentWire.end.position : parentWire.start.position
             );
         line.enabled = false;
 
