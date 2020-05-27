@@ -60,6 +60,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentWire: {fileID: 1215729932297674154}
   line: {fileID: 4778442638303074940}
+  lineJitterPoints: 3
+  minLineJitter: 0.025
+  maxLineJitter: 0.125
 --- !u!120 &4778442638303074940
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -133,15 +136,15 @@ LineRenderer:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 0, a: 1}
       key1: {r: 0.41568628, g: 1, b: 0, a: 1}
-      key2: {r: 0.41568625, g: 1, b: 0, a: 0}
+      key2: {r: 0.41568628, g: 1, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 39321
-      ctime1: 65535
-      ctime2: 65535
+      ctime0: 0
+      ctime1: 58982
+      ctime2: 58982
       ctime3: 0
       ctime4: 0
       ctime5: 0
