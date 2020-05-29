@@ -19,23 +19,6 @@ public class PlayerMovement : MonoBehaviour
     public float accelSpeed = 1;
     public float jumpPower = 5;
 
-    private void Start()
-    {
-        //If an orienter wasn't assigned in the inspector,
-        if (!orienter)
-        {
-            //Find the orienter in the scene.
-            orienter = GameObject.FindWithTag("Orienter");
-
-            //If orienter is still null, no orienter was found in the scene.
-            if (!orienter)
-            {
-                Debug.LogError("PlayerMovement: No orienter was assigned or found. " +
-                    "Manually assign an orienter or add one to the scene with tag \"Orienter.\"");
-            }
-        }
-    }
-
     void FixedUpdate()
     {
         //Set up a movement vector.

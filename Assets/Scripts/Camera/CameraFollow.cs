@@ -4,26 +4,15 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject focalObj;
+    [SerializeField] private GameObject focalObj = null;
     private Vector3 camOffset;
 
     void Start()
     {
-        //If a focal object hasn't been manually assigned
-        if (!focalObj)
-        {
-            //Find the player and make them the focal object.
-            focalObj = GameObject.FindWithTag("Player");
+        //Ensure this object has no parents mucking up its transform, so it can move independently.
+        gameObject.transform.parent = null;
 
-            //If focal object is still null, no player was found.
-            if (!focalObj)
-            {
-                Debug.LogError("CameraFollow: No focal object was assigned and no player was found. " +
-                    "Manually assign a focal object or add a player to the scene with tag \"Player.\"");
-            }
-        }
-
+        //Get the position the camera should be relative to its focal object.
         camOffset = transform.position - focalObj.transform.position;
     }
 
