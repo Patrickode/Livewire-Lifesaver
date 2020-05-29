@@ -18,13 +18,16 @@ public class CameraFollow : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3
-            (
-                focalObj.transform.position.x + camOffset.x,
-                focalObj.transform.position.y + camOffset.y,
-                focalObj.transform.position.z + camOffset.z
-            );
+        if (focalObj)
+        {
+            transform.position = new Vector3
+                (
+                    focalObj.transform.position.x + camOffset.x,
+                    focalObj.transform.position.y + camOffset.y,
+                    focalObj.transform.position.z + camOffset.z
+                );
 
-        transform.LookAt(focalObj.transform);
+            transform.LookAt(focalObj.transform); 
+        }
     }
 }
