@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CurrentFlow : MonoBehaviour
 {
@@ -40,7 +39,8 @@ public class CurrentFlow : MonoBehaviour
     void Update()
     {
         //If there are wires to follow in the level and if we're not past the last wire,
-        if (WireManager.GetCount() > 0 && currentIndex < WireManager.GetCount())
+        int numOfWires = WireManager.GetCount();
+        if (numOfWires > 0 && currentIndex < numOfWires)
         {
             //If the current isn't transitioning between wires,
             if (!currentTransitioning)
@@ -67,6 +67,13 @@ public class CurrentFlow : MonoBehaviour
                 DoCurrentTransition();
             }
         }
+        //If there are wires in the level and we got this far, the wire's reached the end. Initiate 
+        //the win sequence.
+        else if (numOfWires > 0)
+        {
+            Destroy(gameObject);
+            EventDispatcher.Dispatch(new EventDefiner.LevelEnd(true));
+        }
     }
 
     /// <summary>
@@ -90,7 +97,7 @@ public class CurrentFlow : MonoBehaviour
             else
             {
                 Destroy(gameObject);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                EventDispatcher.Dispatch(new EventDefiner.LevelEnd(false));
             }
         }
     }

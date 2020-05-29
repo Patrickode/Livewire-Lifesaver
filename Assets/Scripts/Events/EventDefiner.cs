@@ -9,13 +9,13 @@ public class EventDefiner : MonoBehaviour
 {
     public abstract class GenericEvent { }
 
-    public class ExampleEvent : GenericEvent
+    public class LevelEnd : GenericEvent
     {
-        public int SomeData { get; private set; }
+        public bool LevelSuccess { get; private set; }
 
-        public ExampleEvent(int someData)
+        public LevelEnd(bool levelSuccess)
         {
-            SomeData = someData;
+            LevelSuccess = levelSuccess;
         }
     }
 }
