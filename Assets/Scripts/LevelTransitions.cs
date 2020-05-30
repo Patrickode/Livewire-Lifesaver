@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,11 +20,15 @@ public class LevelTransitions : MonoBehaviour
     private void Awake()
     {
         EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.AddListener<EventDefiner.MenuExit>(OnMenuExit);
+        EventDispatcher.AddListener<EventDefiner.MenuSwap>(OnMenuSwap);
     }
 
     private void OnDestroy()
     {
         EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.RemoveListener<EventDefiner.MenuExit>(OnMenuExit);
+        EventDispatcher.RemoveListener<EventDefiner.MenuSwap>(OnMenuSwap);
     }
 
     private void Start()
@@ -37,6 +42,26 @@ public class LevelTransitions : MonoBehaviour
         StartCoroutine(FadeBetween(Color.clear, Color.black, fadeOutTime));
     }
 
+    private void OnMenuExit(EventDefiner.MenuExit evt)
+    {
+        StartCoroutine(LoadSceneAfterFade(evt.DestinationSceneIndex));
+    }
+    private IEnumerator LoadSceneAfterFade(int sceneIndex)
+    {
+        yield return StartCoroutine(FadeBetween(Color.clear, Color.black, fadeOutTime));
+        SceneManager.LoadScene(sceneIndex);
+    }
+
+    private void OnMenuSwap(EventDefiner.MenuSwap _)
+    {
+        StartCoroutine(FadeBetween(Color.white, new Color(1, 1, 1, 0), fadeInTime));
+    }
+
+    /// <summary>
+    /// Moves the win or loss panel up as part of level transition.
+    /// </summary>
+    /// <param name="levelSuccess">Whether the player succeeded in finishing the level or not.</param>
+    /// <returns></returns>
     private IEnumerator ShowPanel(bool levelSuccess)
     {
         //Depending on whether the player succeeded, select the right panel to animate.
@@ -92,6 +117,13 @@ public class LevelTransitions : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Makes a panel in the transition canvas fade between two colors in a given amount of seconds.
+    /// </summary>
+    /// <param name="fromColor">The color to fade from.</param>
+    /// <param name="toColor">The color to fade to.</param>
+    /// <param name="fadeTime">The amount of time in seconds the fade will take.</param>
+    /// <returns></returns>
     private IEnumerator FadeBetween(Color fromColor, Color toColor, float fadeTime)
     {
         isFading = true;
@@ -113,5 +145,16 @@ public class LevelTransitions : MonoBehaviour
         if (Mathf.Approximately(toColor.a, 0)) { fadePanel.gameObject.SetActive(false); }
 
         isFading = false;
+    }
+
+    /// <summary>
+    /// Calls FadeBetween() twice in direct sequence.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator FadeInOut(Color fromColor1, Color toColor1, float fadeTime1,
+        Color fromColor2, Color toColor2, float fadeTime2)
+    {
+        yield return StartCoroutine(FadeBetween(fromColor1, toColor1, fadeTime1));
+        StartCoroutine(FadeBetween(fromColor2, toColor2, fadeTime2));
     }
 }

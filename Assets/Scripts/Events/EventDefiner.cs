@@ -18,4 +18,19 @@ public class EventDefiner : MonoBehaviour
             LevelSuccess = levelSuccess;
         }
     }
+
+    public class MenuExit : GenericEvent
+    {
+        public int DestinationSceneIndex { get; private set; }
+
+        public MenuExit(int destinationSceneIndex)
+        {
+            DestinationSceneIndex = destinationSceneIndex;
+        }
+    }
+
+    public class MenuSwap : GenericEvent
+    {
+        public MenuSwap() { }
+    }
 }

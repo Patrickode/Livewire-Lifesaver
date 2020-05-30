@@ -11,7 +11,7 @@ public class MenuButtons : MonoBehaviour
 
     public void LoadScene(int index)
     {
-        SceneManager.LoadScene(index);
+        EventDispatcher.Dispatch(new EventDefiner.MenuExit(index));
     }
 
     public void QuitGame()
@@ -21,6 +21,8 @@ public class MenuButtons : MonoBehaviour
 
     public void ToggleMenu()
     {
+        EventDispatcher.Dispatch(new EventDefiner.MenuSwap());
+
         if (showMenu)
         {
             showMenu = false;
