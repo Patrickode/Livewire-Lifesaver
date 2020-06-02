@@ -4945,8 +4945,8 @@ MonoBehaviour:
   rb: {fileID: 8404675213198702977}
   coll: {fileID: 8404675213198702981}
   orienter: {fileID: 8404675214176909747}
-  maxVelocity: 3.5
-  accelSpeed: 1
+  maxMoveVelocity: 3.5
+  moveSpeed: 45
   jumpPower: 6
 --- !u!1001 &5384536288841024330
 PrefabInstance:
