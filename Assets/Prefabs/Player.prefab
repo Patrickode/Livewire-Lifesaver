@@ -4948,6 +4948,8 @@ MonoBehaviour:
   maxMoveVelocity: 3.5
   moveSpeed: 45
   jumpPower: 6
+  coyoteTime: 0.1
+  fallGravityMultiplier: 2
 --- !u!1001 &5384536288841024330
 PrefabInstance:
   m_ObjectHideFlags: 0

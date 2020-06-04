@@ -19,18 +19,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxMoveVelocity = 3.5f;
     [SerializeField] private float moveSpeed = 1;
     [SerializeField] private float jumpPower = 5;
-    [SerializeField] [Range(1, 4)] private float fallGravityMultiplier = 2f;
-
-    private void Start()
-    {
-        //We subtract jumpGravityMultiplier by one because Physics.gravity.y is already being added
-        //once every frame; by doing this, we ensure the "multiplier" is accurate in the jump code
-        //We don't want to multiply by zero, though, so only subtract if greater than 1
-        if (fallGravityMultiplier > 1)
-        {
-            fallGravityMultiplier -= 1;
-        }
-    }
+    [SerializeField] private float coyoteTime = 0;
+    [SerializeField] [Range(1.001f, 4)] private float fallGravityMultiplier = 2f;
+    private bool canJump;
+    private float secondsOffGround;
 
     void FixedUpdate()
     {
@@ -61,23 +53,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //If the user presses space and is touching ground, make the player jump.
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        //Set whether the player can jump or not.
+        SetJumpAllowance();
+
+        //If the user presses space and is allowed to jump, make the player jump.
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+
+            //Also expedite the rolling progress during jumps by adding some torque.
+            //This cross product gets the axis of angular velocity (perpendicular to velocity)
+            rb.AddTorque(Vector3.Cross(Vector3.up, rb.velocity));
+
+            //Take note that the player just jumped. This is reset upon being grounded, and ensures the player
+            //can't jump twice.
+            canJump = false;
         }
 
         //If the player isn't holding space after they jump, and they haven't hit the peak of their jump yet,
         //Increase gravity to allow for a short hop
         if (!Input.GetKey(KeyCode.Space) && rb.velocity.y > 0)
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * fallGravityMultiplier * Time.deltaTime;
+            //We subtract fallGrav by 1 because gravity is already added once per frame; to make fallGrav
+            //accurate, we need to subtract it by 1. fallGrav can't be 1 due to its range property, so no zeroes
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1) * Time.deltaTime;
         }
         //Otherwise, if the player has reached the peak of their jump, increase gravity to make the jump feel
         //weightier
         else if (rb.velocity.y < 0)
         {
-            rb.velocity += Vector3.up * Physics.gravity.y * fallGravityMultiplier * Time.deltaTime;
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallGravityMultiplier - 1) * Time.deltaTime;
         }
     }
 
@@ -101,8 +106,42 @@ public class PlayerMovement : MonoBehaviour
     private bool IsGrounded()
     {
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
-        //Cast a sphere, very slightly smaller than the player, downward a by a very small amount. This checks if
-        //there is a collider right below the player.
-        return Physics.SphereCast(transform.position, coll.bounds.extents.y - 0.0001f, Vector3.down, out _, 0.002f);
+        //Cast a sphere with the same radius as the player downward to see if there's something underneath.
+        return Physics.SphereCast
+        (
+            //Start just a little bit above the player, so if the player is very slightly in the ground
+            //as rigidbodies sometimes are, then the ground can still be detected.
+            //This ignores ceilings too, because SphereCast ignores colliders it starts inside of!
+            transform.position + Vector3.up * 0.025f,
+            coll.bounds.extents.y,
+            Vector3.down,
+            out _,
+            0.05f
+        );
+    }
+
+    private void SetJumpAllowance()
+    {
+        //If the player is grounded,
+        if (IsGrounded())
+        {
+            //Reset the frame counter, and make sure the player can jump.
+            //They hit the ground, so they're not jumping anymore.
+            secondsOffGround = 0;
+            canJump = true;
+        }
+        //If the player is not grounded,
+        else
+        {
+            //Add to the number of frames the player has been off the ground.
+            secondsOffGround += Time.deltaTime;
+
+            //If the frame counter is greater than the leeway allowed, the player can't jump anymore.
+            //The greater the frame leeway, the more time the player has to jump after leaving the ground.
+            if (secondsOffGround > coyoteTime)
+            {
+                canJump = false;
+            }
+        }
     }
 }
