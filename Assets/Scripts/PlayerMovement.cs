@@ -125,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
         //If the player is grounded,
         if (IsGrounded())
         {
-            //Reset the frame counter, and make sure the player can jump.
+            //Reset the coyote time counter, and make sure the player can jump.
             //They hit the ground, so they're not jumping anymore.
             secondsOffGround = 0;
             canJump = true;
