@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb = null;
     [SerializeField]
     private Collider coll = null;
-
     /// <summary>
     /// The object to reference when moving "forward," "left," "backward," or "right."
     /// </summary>
