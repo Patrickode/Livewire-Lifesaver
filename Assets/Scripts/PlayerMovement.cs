@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         SetJumpAllowance();
 
         //Check and see if the jump button was pressed, and if so, set 
-        StartCoroutine(CheckForBufferedJump());
+        StartCoroutine(CheckForBufferedJump(jumpBufferTime));
 
         //If the user presses space and is allowed to jump, make the player jump.
         if (!onJumpCooldown && jumpBuffered && canJump)
@@ -179,12 +179,17 @@ public class PlayerMovement : MonoBehaviour
         onJumpCooldown = false;
     }
 
-    private IEnumerator CheckForBufferedJump()
+    /// <summary>
+    /// Check if the player has pressed the jump button, and if so, reflect that in a bool.
+    /// This bool is reset after bufferTime has passed.
+    /// </summary>
+    /// <param name="bufferTime">How long to "hold on to" the player's input.</param>
+    private IEnumerator CheckForBufferedJump(float bufferTime)
     {
         if (!jumpBuffered && Input.GetKeyDown(KeyCode.Space))
         {
             jumpBuffered = true;
-            yield return new WaitForSeconds(jumpBufferTime);
+            yield return new WaitForSeconds(bufferTime);
             jumpBuffered = false;
         }
     }
