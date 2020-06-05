@@ -18,11 +18,16 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The max speed the player can move via input.")]
     [SerializeField] private float maxMoveVelocity = 3.5f;
     [SerializeField] private float moveSpeed = 1;
+
     [SerializeField] private float jumpPower = 5;
-    [SerializeField] private float coyoteTime = 0;
+    [SerializeField] private float coyoteTime = 0.1f;
+    [SerializeField] private float jumpCooldownTime = 0.1f;
     [SerializeField] [Range(1.001f, 4)] private float fallGravityMultiplier = 2f;
+    [SerializeField] private float jumpBufferTime = 0.1f;
     private bool canJump;
+    private bool onJumpCooldown;
     private float secondsOffGround;
+    private bool jumpBuffered;
 
     void FixedUpdate()
     {
@@ -56,9 +61,19 @@ public class PlayerMovement : MonoBehaviour
         //Set whether the player can jump or not.
         SetJumpAllowance();
 
+        //Check and see if the jump button was pressed, and if so, set 
+        StartCoroutine(CheckForBufferedJump());
+
         //If the user presses space and is allowed to jump, make the player jump.
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+        if (!onJumpCooldown && jumpBuffered && canJump)
         {
+            //There is no longer a jump buffered because we're about to do that jump.
+            jumpBuffered = false;
+
+            //Start a cooldown on jumping, so the player can't jump again immediately.
+            //This mitigates problems with the leeway on IsGrounded(), which is otherwise necessary.
+            StartCoroutine(SetJumpCooldown(jumpCooldownTime));
+
             rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
 
             //Also expedite the rolling progress during jumps by adding some torque.
@@ -103,6 +118,10 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
     }
 
+    /// <summary>
+    /// Checks to see if there is a collider directly below the player.
+    /// </summary>
+    /// <returns>Whether there is a collider directly below the player or not.</returns>
     private bool IsGrounded()
     {
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
@@ -120,6 +139,9 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
+    /// <summary>
+    /// Set whether the player can jump or not, allowing some leeway after leaving ground.
+    /// </summary>
     private void SetJumpAllowance()
     {
         //If the player is grounded,
@@ -142,6 +164,27 @@ public class PlayerMovement : MonoBehaviour
             {
                 canJump = false;
             }
+        }
+    }
+
+    /// <summary>
+    /// Enables a jump cooldown for length seconds, to ensure the player can't jump twice.
+    /// </summary>
+    /// <param name="length">How long to wait before allowing the player to jump again.</param>
+    private IEnumerator SetJumpCooldown(float length)
+    {
+        onJumpCooldown = true;
+        yield return new WaitForSeconds(length);
+        onJumpCooldown = false;
+    }
+
+    private IEnumerator CheckForBufferedJump()
+    {
+        if (!jumpBuffered && Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBuffered = true;
+            yield return new WaitForSeconds(jumpBufferTime);
+            jumpBuffered = false;
         }
     }
 }
