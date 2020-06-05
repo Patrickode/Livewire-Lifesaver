@@ -4947,10 +4947,12 @@ MonoBehaviour:
   orienter: {fileID: 8404675214176909747}
   maxMoveVelocity: 3.5
   moveSpeed: 45
+  wallRideTime: 1
+  wallRideTimer: 0
   jumpPower: 7
+  fallGravityMultiplier: 2
   coyoteTime: 0.1
   jumpCooldownTime: 0.1
-  fallGravityMultiplier: 2
   jumpBufferTime: 0.1
 --- !u!1001 &5384536288841024330
 PrefabInstance:

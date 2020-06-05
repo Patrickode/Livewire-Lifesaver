@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxMoveVelocity = 3.5f;
     [SerializeField] private float moveSpeed = 1;
 
+    [Header("Wall Ride Settings")]
+    [SerializeField] [Range(0, 2)] private float wallRideTime = 1;
+    private float wallRideTimer = 0;
+
     [Header("Jump Settings")]
     [SerializeField] private float jumpPower = 5;
     [SerializeField] [Range(1.001f, 4)] private float fallGravityMultiplier = 2f;
@@ -29,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     private bool onJumpCooldown;
     private float secondsOffGround;
     private bool jumpBuffered;
+
+    //--- Main Functions --- //
 
     void FixedUpdate()
     {
@@ -53,21 +59,28 @@ public class PlayerMovement : MonoBehaviour
             inputDir += orienter.transform.right;
         }
 
-        //Now that we've gotten all the directions of the user's input, normalize it and move with it.
-        MoveLaterally(inputDir.normalized);
+        if (inputDir != Vector3.zero)
+        {
+            //Now that we've gotten all the directions of the user's input, normalize it and move with it.
+            inputDir.Normalize();
+            inputDir = GetWallRideDirection(inputDir);
+            MoveWithDirection(inputDir);
+        }
     }
 
     private void Update()
     {
-        //Set whether the player can jump or not.
         SetJumpAllowance();
 
-        //Check and see if the jump button was pressed, and if so, set 
-        StartCoroutine(CheckForBufferedJump(jumpBufferTime));
+        if (IsGrounded()) { wallRideTimer = 0; }
 
         //If the user presses space and is allowed to jump, make the player jump.
+        StartCoroutine(CheckForBufferedJump(jumpBufferTime));
         if (!onJumpCooldown && jumpBuffered && canJump)
         {
+            //Immediately cancel wall rides by adding to the timer.
+            wallRideTimer += wallRideTimer;
+
             //There is no longer a jump buffered because we're about to do that jump.
             jumpBuffered = false;
 
@@ -102,11 +115,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    //--- Helper Functions ---//
+
     /// <summary>
     /// Applies velocity in the given direction, diregarding the y component of velocity.
     /// </summary>
     /// <param name="moveDir">The direction to move in.</param>
-    private void MoveLaterally(Vector3 moveDir)
+    private void MoveWithDirection(Vector3 moveDir)
     {
         //First, get the current velocity and discard the y component.
         Vector3 velocityXZ = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -116,7 +131,62 @@ public class PlayerMovement : MonoBehaviour
         newVel = Vector3.ClampMagnitude(newVel, maxMoveVelocity);
 
         //Finally, now that we've set and clamped the new velocity, apply it.
-        rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
+        //If newVel has a y component, we're wall riding, so gravity doesn't matter and we can apply directly.
+        if (newVel.y > 0)
+        {
+            rb.velocity = new Vector3(newVel.x, newVel.y, newVel.z);
+        }
+        else
+        {
+            rb.velocity = new Vector3(newVel.x, rb.velocity.y, newVel.z);
+        }
+    }
+
+    private Vector3 GetWallRideDirection(Vector3 moveDir)
+    {
+        //If we haven't exceeded the max wall ride time,
+        if (wallRideTimer < wallRideTime)
+        {
+            //Check if there is something in the direction the player wants to move.
+            RaycastHit hit;
+            bool castSuccess = Physics.SphereCast
+            (
+                //same as IsGrounded(), but out is not discarded and direction is different
+                transform.position + -moveDir * 0.025f,
+                coll.bounds.extents.y,
+                moveDir,
+                out hit,
+                0.05f
+            );
+
+            //If the cast hit something, and the player is moving toward (or directly along) that wall,
+            if (castSuccess && Vector3.Dot(hit.normal, moveDir) <= 0)
+            {
+                rb.useGravity = false;
+
+                //Add to the wall ride timer.
+                wallRideTimer += Time.deltaTime;
+
+                //Get the component of moveDir that is toward the hit and subtract it from moveDir so we can
+                //manipulate it independently.
+                Vector3 towardHit = Vector3.Project(moveDir, hit.normal);
+                moveDir -= towardHit;
+
+                //Make the component toward the hit face upward instead, then add it back to moveDir.
+                towardHit = Vector3.up * towardHit.magnitude;
+                moveDir += towardHit;
+            }
+            else
+            {
+                rb.useGravity = true;
+            }
+        }
+        else
+        {
+            rb.useGravity = true;
+        }
+
+        return moveDir;
     }
 
     /// <summary>
