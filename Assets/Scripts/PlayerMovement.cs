@@ -15,15 +15,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private GameObject orienter = null;
 
+    [Header("Movement Settings")]
     [Tooltip("The max speed the player can move via input.")]
     [SerializeField] private float maxMoveVelocity = 3.5f;
     [SerializeField] private float moveSpeed = 1;
 
+    [Header("Jump Settings")]
     [SerializeField] private float jumpPower = 5;
-    [SerializeField] private float coyoteTime = 0.1f;
-    [SerializeField] private float jumpCooldownTime = 0.1f;
     [SerializeField] [Range(1.001f, 4)] private float fallGravityMultiplier = 2f;
-    [SerializeField] private float jumpBufferTime = 0.1f;
+    [SerializeField] [Range(0, 0.5f)] private float coyoteTime = 0.1f;
+    [SerializeField] [Range(0, 0.5f)] private float jumpCooldownTime = 0.1f;
+    [SerializeField] [Range(0, 0.5f)] private float jumpBufferTime = 0.1f;
     private bool canJump;
     private bool onJumpCooldown;
     private float secondsOffGround;
