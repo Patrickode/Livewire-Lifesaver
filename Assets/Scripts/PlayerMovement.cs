@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Wall Ride Settings")]
     [SerializeField] [Range(0, 2)] private float wallRideTime = 1;
     private float wallRideTimer = 0;
+    private bool wallRiding = false;
+    private Vector3? wallNormal = null;
 
     [Header("Jump Settings")]
     [SerializeField] private float jumpPower = 5;
@@ -71,6 +73,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        //If we aren't wall riding, enable gravity, and if we are, disable it.
+        rb.useGravity = !wallRiding;
+
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
         //Cast a sphere with the same radius as the player downward to see if there's something underneath.
         bool grounded = Physics.SphereCast
@@ -93,15 +98,16 @@ public class PlayerMovement : MonoBehaviour
             grounded = false;
         }
 
-        //If we're grounded wall riding is allowed again.
+        //If we're grounded, we're not wall riding, and wall riding is allowed again.
         if (grounded)
         {
+            wallRiding = false;
             wallRideTimer = 0;
-            rb.useGravity = true;
+            wallNormal = null;
         }
 
         //Set whether the player can jump or not depending on groundedness, accounting for leeway
-        SetJumpAllowance(grounded);
+        SetJumpLeeway(grounded || wallRiding);
         DoJumpLogic();
     }
 
@@ -145,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
             //Check if there is something in the direction the player wants to move.
             bool castSuccess = Physics.SphereCast
             (
-                //same as IsGrounded(), but out is not discarded and direction is different
+                //same as grounded checkin in update, with different directions
                 transform.position + -moveDir * 0.025f,
                 coll.bounds.extents.y,
                 moveDir,
@@ -156,6 +162,7 @@ public class PlayerMovement : MonoBehaviour
             //If the cast hit something,
             if (castSuccess)
             {
+                wallNormal = hit.normal;
                 float normalToXZ = Vector3.Dot(Vector3.up, hit.normal);
 
                 //If the normal of the hit is parallel to the XZ plane (perpendicular to Vector3.up),
@@ -163,8 +170,7 @@ public class PlayerMovement : MonoBehaviour
                 //the wall ride.
                 if (Math.Abs(normalToXZ) <= 0.25f && Vector3.Dot(hit.normal, moveDir) <= 0)
                 {
-                    //Turn off gravity so the player can ride the wall unhindered by it.
-                    rb.useGravity = false;
+                    wallRiding = true;
 
                     //Add to the wall ride timer.
                     wallRideTimer += Time.deltaTime;
@@ -180,17 +186,17 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    rb.useGravity = true;
+                    wallRiding = false;
                 }
             }
             else
             {
-                rb.useGravity = true;
+                wallRiding = false;
             }
         }
         else
         {
-            rb.useGravity = true;
+            wallRiding = false;
         }
 
         return moveDir;
@@ -202,8 +208,7 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(CheckForBufferedJump(jumpBufferTime));
         if (!onJumpCooldown && jumpBuffered && canJump)
         {
-            //Immediately cancel wall rides by adding to the timer.
-            wallRideTimer += wallRideTimer;
+            wallRiding = false;
 
             //There is no longer a jump buffered because we're about to do that jump.
             jumpBuffered = false;
@@ -212,7 +217,19 @@ public class PlayerMovement : MonoBehaviour
             //This mitigates problems with the leeway on IsGrounded(), which is otherwise necessary.
             StartCoroutine(SetJumpCooldown(jumpCooldownTime));
 
-            rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+            //If wallNormal isn't null, then we're jumping off a wall, and we should jump away from that wall.
+            if (wallNormal is Vector3 normal)
+            {
+                Vector3 jumpVect = Vector3.up + normal;
+                jumpVect.Normalize();
+                jumpVect *= jumpPower;
+                rb.velocity = new Vector3(jumpVect.x, jumpVect.y, jumpVect.z);
+            }
+            //Otherwise, just jump up.
+            else
+            {
+                rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+            }
 
             //Also expedite the rolling progress during jumps by adding some torque.
             //This cross product gets the axis of angular velocity (perpendicular to velocity)
@@ -244,11 +261,11 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Set whether the player can jump or not, allowing some leeway after leaving ground.
     /// </summary>
-    /// /// <param name="grounded">Whether the player is on the ground or not.</param>
-    private void SetJumpAllowance(bool grounded)
+    /// /// <param name="grounded">Whether the player is in a state they can jump from or not.</param>
+    private void SetJumpLeeway(bool jumpState)
     {
         //If the player is grounded,
-        if (grounded)
+        if (jumpState)
         {
             //Reset the coyote time counter, and make sure the player can jump.
             //They hit the ground, so they're not jumping anymore.
@@ -266,6 +283,7 @@ public class PlayerMovement : MonoBehaviour
             if (secondsOffGround > coyoteTime)
             {
                 canJump = false;
+                wallNormal = null;
             }
         }
     }
