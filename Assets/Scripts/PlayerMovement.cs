@@ -22,7 +22,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Wall Ride Settings")]
     [SerializeField] [Range(0, 2)] private float wallRideTime = 1;
+    [SerializeField] [Range(0, 0.25f)] private float stickyWallTime = 0.06f;
     private float wallRideTimer = 0;
+    private float stickyWallTimer = 0;
     private bool wallRiding = false;
     private Vector3? wallNormal = null;
 
@@ -64,6 +66,25 @@ public class PlayerMovement : MonoBehaviour
             inputDir += orienter.transform.right;
         }
 
+        //If the player is wall riding, we have the normal of the wall, and the player is moving away 
+        //from the wall,
+        if (!wallRiding && wallNormal is Vector3 normal && Vector3.Dot(normal, inputDir) > 0)
+        {
+            //Check if the sticky wall timer has exceeded the sticky wall time, and if so,
+            if (stickyWallTimer < stickyWallTime)
+            {
+                //Subtract the component away from the wall from inputDir and increment the timer.
+                //This makes it so the player sticks to the wall for a bit, to give them leeway for a wall jump.
+                inputDir -= Vector3.Project(inputDir, normal);
+                stickyWallTimer += Time.deltaTime;
+            }
+        }
+        //If the player is not wall riding or is not holding away from the wall, reset the sticky timer.
+        else
+        {
+            stickyWallTimer = 0;
+        }
+
         //Now that input direction has been collected, adjust it for wall riding if applicable.
         //Set gravity accordingly.
         wallRiding = TryWallRide(ref inputDir);
@@ -102,7 +123,6 @@ public class PlayerMovement : MonoBehaviour
         {
             wallRiding = false;
             wallRideTimer = 0;
-            wallNormal = null;
         }
 
         //Set whether the player can jump or not depending on groundedness, accounting for leeway
@@ -193,6 +213,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //If we got this far, one of the checks above failed, and thus, we aren't wall riding.
+        wallNormal = null;
         return false;
     }
 
@@ -279,7 +300,6 @@ public class PlayerMovement : MonoBehaviour
             if (leewayTimer > jumpLeewayTime)
             {
                 jumpLeeway = false;
-                wallNormal = null;
             }
         }
     }
