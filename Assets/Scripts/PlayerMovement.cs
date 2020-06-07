@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Wall Ride Settings")]
     [SerializeField] [Range(0, 2)] private float wallRideTime = 1;
+    [Tooltip("How long to make the player stick to walls before moving off, when attempting to move away " +
+        "from that wall.")]
     [SerializeField] [Range(0, 0.25f)] private float stickyWallTime = 0.06f;
     private float wallRideTimer = 0;
     private float stickyWallTimer = 0;
@@ -213,7 +215,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //If we got this far, one of the checks above failed, and thus, we aren't wall riding.
-        wallNormal = null;
         return false;
     }
 
@@ -234,10 +235,10 @@ public class PlayerMovement : MonoBehaviour
             if (wallNormal is Vector3 normal)
             {
                 //Jump up, away from the wall, and in whatever direction we were moving just before this.
-                Vector3 jumpVect = Vector3.up + normal + rb.velocity.normalized;
+                Vector3 jumpVect = Vector3.up + normal;
                 jumpVect.Normalize();
                 jumpVect *= jumpPower;
-                rb.velocity = new Vector3(jumpVect.x, jumpVect.y, jumpVect.z);
+                rb.velocity += new Vector3(jumpVect.x, jumpVect.y, jumpVect.z);
             }
             //Otherwise, just jump up.
             else
@@ -300,6 +301,7 @@ public class PlayerMovement : MonoBehaviour
             if (leewayTimer > jumpLeewayTime)
             {
                 jumpLeeway = false;
+                wallNormal = null;
             }
         }
     }
