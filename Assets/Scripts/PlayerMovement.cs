@@ -32,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0, 0.5f)] private float coyoteTime = 0.1f;
     [SerializeField] [Range(0, 0.5f)] private float jumpCooldownTime = 0.1f;
     [SerializeField] [Range(0, 0.5f)] private float jumpBufferTime = 0.1f;
-    private bool canJump;
+    private bool grounded;
+    private bool jumpLeeway;
     private bool onJumpCooldown;
     private float secondsOffGround;
     private bool jumpBuffered;
@@ -62,23 +63,20 @@ public class PlayerMovement : MonoBehaviour
             inputDir += orienter.transform.right;
         }
 
-        if (inputDir != Vector3.zero)
-        {
-            //Now that we've gotten all the directions of the user's input, normalize it and move with it.
-            inputDir.Normalize();
-            inputDir = GetWallRideDirection(inputDir);
-            MoveWithDirection(inputDir);
-        }
+        //Now that input direction has been collected, adjust it for wall riding if applicable.
+        //Set gravity accordingly.
+        wallRiding = TryWallRide(ref inputDir);
+        rb.useGravity = !wallRiding;
+
+        //Now that we've settled what direction to move in, move in that direction.
+        if (inputDir != Vector3.zero) { MoveWithDirection(inputDir.normalized); }
     }
 
     private void Update()
     {
-        //If we aren't wall riding, enable gravity, and if we are, disable it.
-        rb.useGravity = !wallRiding;
-
         //Inspired / adapted from http://answers.unity.com/answers/196395/view.html
         //Cast a sphere with the same radius as the player downward to see if there's something underneath.
-        bool grounded = Physics.SphereCast
+        grounded = Physics.SphereCast
         (
             //Start just a little bit above the player, so if the player is very slightly in the ground
             //as rigidbodies sometimes are, then the ground can still be detected.
@@ -141,17 +139,17 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Checks to see if the player is against a wall, and if so, returns an altered moveDir.
     /// </summary>
-    /// <param name="moveDir">The direction to move in before any potential updates.</param>
-    /// <returns>The potentially altered direction to move in.</returns>
-    private Vector3 GetWallRideDirection(Vector3 moveDir)
+    /// <param name="moveDir">The direction to adjust if wall riding. Unchanged if not wall riding.</param>
+    /// <returns>Whether the player is wall riding or not.</returns>
+    private bool TryWallRide(ref Vector3 moveDir)
     {
-        //If we haven't exceeded the max wall ride time,
-        if (wallRideTimer < wallRideTime)
+        //If we haven't exceeded the max wall ride time and are moving, we could be wall riding.
+        if (wallRideTimer < wallRideTime && moveDir != Vector3.zero)
         {
-            //Check if there is something in the direction the player wants to move.
+            //Check if there is something in the direction of movement.
             bool castSuccess = Physics.SphereCast
             (
-                //same as grounded checkin in update, with different directions
+                //same as grounded check in update, with different directions
                 transform.position + -moveDir * 0.025f,
                 coll.bounds.extents.y,
                 moveDir,
@@ -159,54 +157,38 @@ public class PlayerMovement : MonoBehaviour
                 0.05f
             );
 
-            //If the cast hit something,
-            if (castSuccess)
+            //If the cast hit something and the normal of that something is roughly along the XZ plane,
+            //it's time to wall ride; we're moving against a wall.
+            if (castSuccess && Math.Abs(Vector3.Dot(Vector3.up, hit.normal)) <= 0.25f)
             {
+                //Add to the wall ride timer.
+                wallRideTimer += Time.deltaTime;
+
+                //Get the component of moveDir that is toward the hit and subtract it from moveDir. We're about
+                //to change that component to go up the hit surface instead of into it.
+                Vector3 towardHit = Vector3.Project(moveDir, hit.normal);
+                moveDir -= towardHit;
+
+                //Redirect the component toward the hit upward, then add it back to velocity.
+                towardHit = Vector3.up * towardHit.magnitude;
+                moveDir += towardHit;
+
+                //Save the normal of this wall to a variable in case of wall jumping.
                 wallNormal = hit.normal;
-                float normalToXZ = Vector3.Dot(Vector3.up, hit.normal);
 
-                //If the normal of the hit is parallel to the XZ plane (perpendicular to Vector3.up),
-                //and the player is moving toward the hit (i.e., their move direction is away from the normal), do
-                //the wall ride.
-                if (Math.Abs(normalToXZ) <= 0.25f && Vector3.Dot(hit.normal, moveDir) <= 0)
-                {
-                    wallRiding = true;
-
-                    //Add to the wall ride timer.
-                    wallRideTimer += Time.deltaTime;
-
-                    //Get the component of moveDir that is toward the hit and subtract it from moveDir so we can
-                    //manipulate it independently.
-                    Vector3 towardHit = Vector3.Project(moveDir, hit.normal);
-                    moveDir -= towardHit;
-
-                    //Make the component toward the hit face upward instead, then add it back to moveDir.
-                    towardHit = Vector3.up * towardHit.magnitude;
-                    moveDir += towardHit;
-                }
-                else
-                {
-                    wallRiding = false;
-                }
-            }
-            else
-            {
-                wallRiding = false;
+                return true;
             }
         }
-        else
-        {
-            wallRiding = false;
-        }
 
-        return moveDir;
+        //If we got this far, one of the checks above failed, and thus, we aren't wall riding.
+        return false;
     }
 
     private void DoJumpLogic()
     {
         //If the user presses space and is allowed to jump, make the player jump.
         StartCoroutine(CheckForBufferedJump(jumpBufferTime));
-        if (!onJumpCooldown && jumpBuffered && canJump)
+        if (!onJumpCooldown && jumpBuffered && jumpLeeway)
         {
             wallRiding = false;
 
@@ -220,7 +202,8 @@ public class PlayerMovement : MonoBehaviour
             //If wallNormal isn't null, then we're jumping off a wall, and we should jump away from that wall.
             if (wallNormal is Vector3 normal)
             {
-                Vector3 jumpVect = Vector3.up + normal;
+                //Jump up, away from the wall, and in whatever direction we were moving just before this.
+                Vector3 jumpVect = Vector3.up + normal + rb.velocity.normalized;
                 jumpVect.Normalize();
                 jumpVect *= jumpPower;
                 rb.velocity = new Vector3(jumpVect.x, jumpVect.y, jumpVect.z);
@@ -237,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
 
             //Take note that the player just jumped. This is reset upon being grounded, and ensures the player
             //can't jump twice.
-            canJump = false;
+            jumpLeeway = false;
         }
 
         //If the player isn't holding space after they jump, and they haven't hit the peak of their jump yet,
@@ -264,25 +247,25 @@ public class PlayerMovement : MonoBehaviour
     /// /// <param name="grounded">Whether the player is in a state they can jump from or not.</param>
     private void SetJumpLeeway(bool jumpState)
     {
-        //If the player is grounded,
+        //If the player is in a state they can jump from,
         if (jumpState)
         {
             //Reset the coyote time counter, and make sure the player can jump.
             //They hit the ground, so they're not jumping anymore.
             secondsOffGround = 0;
-            canJump = true;
+            jumpLeeway = true;
         }
-        //If the player is not grounded,
+        //If the player is not in a state they can jump from,
         else
         {
-            //Add to the number of frames the player has been off the ground.
+            //Add to the number of seconds the player has been away from a jump state.
             secondsOffGround += Time.deltaTime;
 
-            //If the frame counter is greater than the leeway allowed, the player can't jump anymore.
-            //The greater the frame leeway, the more time the player has to jump after leaving the ground.
+            //If the player has been away from a jump state for too long, make it so they can't jump anymore.
+            //This allows players to jump even after they leave a jump state for a bit.
             if (secondsOffGround > coyoteTime)
             {
-                canJump = false;
+                jumpLeeway = false;
                 wallNormal = null;
             }
         }
