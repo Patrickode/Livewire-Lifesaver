@@ -29,14 +29,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] private float jumpPower = 5;
     [SerializeField] [Range(1.001f, 4)] private float fallGravityMultiplier = 2f;
-    [SerializeField] [Range(0, 0.5f)] private float coyoteTime = 0.1f;
+    [SerializeField] [Range(0, 0.5f)] private float jumpLeewayTime = 0.1f;
     [SerializeField] [Range(0, 0.5f)] private float jumpCooldownTime = 0.1f;
     [SerializeField] [Range(0, 0.5f)] private float jumpBufferTime = 0.1f;
     private bool grounded;
     private bool jumpLeeway;
+    private float leewayTimer;
     private bool onJumpCooldown;
-    private float secondsOffGround;
     private bool jumpBuffered;
+    private Coroutine jumpBufferCoroutine;
 
     //--- Update Functions --- //
 
@@ -106,7 +107,18 @@ public class PlayerMovement : MonoBehaviour
 
         //Set whether the player can jump or not depending on groundedness, accounting for leeway
         SetJumpLeeway(grounded || wallRiding);
+
+        //If the user presses space, (re)start the buffer coroutine (if it's running)
+        //This "saves" the button press so the player can press jump early and still jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (jumpBufferCoroutine != null) { StopCoroutine(jumpBufferCoroutine); }
+            jumpBufferCoroutine = StartCoroutine(CheckForBufferedJump(jumpBufferTime));
+        }
+
+        //Now that allowances and leeway and whatnot are set, actually do the jump if applicable.
         DoJumpLogic();
+        AddJumpGravity();
     }
 
     //--- Main Movement Functions ---//
@@ -186,18 +198,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void DoJumpLogic()
     {
-        //If the user presses space and is allowed to jump, make the player jump.
-        StartCoroutine(CheckForBufferedJump(jumpBufferTime));
+        //If the user didn't press jump just a bit before this, has pressed jump, and is within the jump leeway,
+        //make them jump.
         if (!onJumpCooldown && jumpBuffered && jumpLeeway)
         {
-            wallRiding = false;
-
-            //There is no longer a jump buffered because we're about to do that jump.
-            jumpBuffered = false;
-
             //Start a cooldown on jumping, so the player can't jump again immediately.
             //This mitigates problems with the leeway on IsGrounded(), which is otherwise necessary.
             StartCoroutine(SetJumpCooldown(jumpCooldownTime));
+
+            wallRiding = false;
+            jumpBuffered = false;
 
             //If wallNormal isn't null, then we're jumping off a wall, and we should jump away from that wall.
             if (wallNormal is Vector3 normal)
@@ -222,9 +232,12 @@ public class PlayerMovement : MonoBehaviour
             //can't jump twice.
             jumpLeeway = false;
         }
+    }
 
+    private void AddJumpGravity()
+    {
         //If the player isn't holding space after they jump, and they haven't hit the peak of their jump yet,
-        //Increase gravity to allow for a short hop
+        //increase gravity to allow for a short hop
         if (!Input.GetKey(KeyCode.Space) && rb.velocity.y > 0)
         {
             //We subtract fallGrav by 1 because gravity is already added once per frame; to make fallGrav
@@ -252,18 +265,18 @@ public class PlayerMovement : MonoBehaviour
         {
             //Reset the coyote time counter, and make sure the player can jump.
             //They hit the ground, so they're not jumping anymore.
-            secondsOffGround = 0;
+            leewayTimer = 0;
             jumpLeeway = true;
         }
         //If the player is not in a state they can jump from,
         else
         {
             //Add to the number of seconds the player has been away from a jump state.
-            secondsOffGround += Time.deltaTime;
+            leewayTimer += Time.deltaTime;
 
             //If the player has been away from a jump state for too long, make it so they can't jump anymore.
             //This allows players to jump even after they leave a jump state for a bit.
-            if (secondsOffGround > coyoteTime)
+            if (leewayTimer > jumpLeewayTime)
             {
                 jumpLeeway = false;
                 wallNormal = null;
