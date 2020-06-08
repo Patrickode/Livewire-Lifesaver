@@ -4948,10 +4948,10 @@ MonoBehaviour:
   maxMoveVelocity: 3.5
   moveSpeed: 45
   wallRideTime: 1
-  wallRideTimer: 0
+  stickyWallTime: 0.1
   jumpPower: 7
   fallGravityMultiplier: 2
-  coyoteTime: 0.1
+  jumpLeewayTime: 0.1
   jumpCooldownTime: 0.1
   jumpBufferTime: 0.1
 --- !u!1001 &5384536288841024330
