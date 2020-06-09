@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] [Range(0, 0.5f)] private float jumpBufferTime = 0.1f;
     private bool jumpLeeway;
     private float leewayTimer;
+    private PlayerState lastJumpState;
     private bool onJumpCooldown;
     private bool jumpBuffered;
     private Coroutine jumpBufferCoroutine;
@@ -140,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Now that allowances and leeway and whatnot are set, actually do the jump if applicable.
-        DoJumpLogic();
+        TryJump();
         AddJumpGravity();
     }
 
@@ -214,11 +215,15 @@ public class PlayerMovement : MonoBehaviour
 
                 //Save the normal of this wall to a variable in case of wall jumping.
                 wallNormal = hit.normal;
+
+                return;
             }
         }
+
+        state = state != PlayerState.WallJumping ? PlayerState.Airborne : state;
     }
 
-    private void DoJumpLogic()
+    private void TryJump()
     {
         //If the user didn't press jump just a bit before this, has pressed jump, and is within the jump leeway,
         //make them jump.
@@ -228,9 +233,9 @@ public class PlayerMovement : MonoBehaviour
             //This mitigates problems with the leeway on IsGrounded(), which is otherwise necessary.
             StartCoroutine(SetJumpCooldown(jumpCooldownTime));
 
-            //If we're wall riding and wallNormal isn't null, then we're jumping off a wall, and we should jump
-            //away from that wall.
-            if (state == PlayerState.WallRiding && wallNormal is Vector3 normal)
+            //If the state we're jumping from is WallRiding and wallNormal isn't null, then we're jumping off
+            //a wall, and we should jump away from that wall.
+            if (lastJumpState == PlayerState.WallRiding && wallNormal is Vector3 normal)
             {
                 //Jump up, away from the wall, and in whatever direction we were moving just before this.
                 Vector3 jumpVect = Vector3.up + normal;
@@ -335,6 +340,7 @@ public class PlayerMovement : MonoBehaviour
             //They hit the ground, so they're not jumping anymore.
             leewayTimer = 0;
             jumpLeeway = true;
+            lastJumpState = state;
         }
         //If the player is not in a state they can jump from,
         else
