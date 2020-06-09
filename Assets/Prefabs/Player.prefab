@@ -4945,10 +4945,13 @@ MonoBehaviour:
   rb: {fileID: 8404675213198702977}
   coll: {fileID: 8404675213198702981}
   orienter: {fileID: 8404675214176909747}
+  state: 0
   maxMoveVelocity: 3.5
-  moveSpeed: 45
+  moveSpeed: 1
   wallRideTime: 1
   stickyWallTime: 0.1
+  wallJumpInputDeadenTime: 0.5
+  wallJumpInputDeadenTimer: 0
   jumpPower: 7
   fallGravityMultiplier: 2
   jumpLeewayTime: 0.1

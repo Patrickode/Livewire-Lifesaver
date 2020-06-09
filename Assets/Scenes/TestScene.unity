@@ -3054,11 +3054,6 @@ PrefabInstance:
       propertyPath: wallJumpPower
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 8404675213198702978, guid: b512f4094c5f39944a2d13c032c29ae2,
-        type: 3}
-      propertyPath: stickyWallTime
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 8404675213198702980, guid: b512f4094c5f39944a2d13c032c29ae2,
         type: 3}
       propertyPath: m_Name
