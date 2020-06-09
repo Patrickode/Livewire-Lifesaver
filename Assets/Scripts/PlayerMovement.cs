@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         "from that wall.")]
     [SerializeField] [Range(0, 0.5f)] private float stickyWallTime = 0.1f;
     [Tooltip("How long to deaden input towards a wall after jumping off of it.")]
-    [SerializeField] [Range(0, 1.5f)] private float wallJumpInputDeadenTime = 0.5f;
+    [SerializeField] [Range(0, 1)] private float wallJumpInputDeadenTime = 0.5f;
     private float wallRideTimer = 0;
     private float stickyWallTimer = 0;
     private float wallJumpInputDeadenTimer = 0;
@@ -83,12 +83,12 @@ public class PlayerMovement : MonoBehaviour
         //Update sticky wall status, which allows some leeway for wall jumping.
         StickyWalls(ref inputDir);
 
+        //Turn movement toward a wall while airborne into upward movement, allowing wall riding.
+        TryWallRide(ref inputDir);
+
         //Deaden input for a bit after wall jumping. This prevents wall jumps from getting
         //stuffed out, and prevents funky behavior like wall climbing by mashing jump.
         DeadenInputTowardWall(ref inputDir);
-
-        //Turn movement toward a wall while airborne into upward movement, allowing wall riding.
-        TryWallRide(ref inputDir);
 
         //If wall riding, don't use gravity, and vice versa.
         rb.useGravity = state != PlayerState.WallRiding;
@@ -308,8 +308,7 @@ public class PlayerMovement : MonoBehaviour
 
             //If the timer hasn't exceeded the max time and the player is trying to move toward
             //the wall,
-            if (wallJumpInputDeadenTimer < wallJumpInputDeadenTime
-                && wallNormal is Vector3 wNormal && Vector3.Dot(wNormal, moveDir) < 0)
+            if (wallJumpInputDeadenTimer < wallJumpInputDeadenTime)
             {
                 //Deaden all movement input.
                 moveDir = Vector3.zero;
