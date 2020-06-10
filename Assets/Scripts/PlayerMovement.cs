@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         WallRiding,
         WallJumping
     }
-    [SerializeField] private PlayerState state;
+    private PlayerState state;
 
     [Header("Movement Settings")]
     [Tooltip("The max speed the player can move via input.")]
