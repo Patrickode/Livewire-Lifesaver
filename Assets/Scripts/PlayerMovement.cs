@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerState { Grounded, Airborne, WallRiding, WallJumping }
+
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
@@ -15,14 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private GameObject orienter = null;
 
-    public enum PlayerState
-    {
-        Grounded,
-        Airborne,
-        WallRiding,
-        WallJumping
-    }
-    private PlayerState state;
+    public PlayerState State { get; private set; }
 
     [Header("Movement Settings")]
     [Tooltip("The max speed the player can move via input.")]
@@ -39,7 +34,9 @@ public class PlayerMovement : MonoBehaviour
     private float wallRideTimer = 0;
     private float stickyWallTimer = 0;
     private float wallJumpInputDeadenTimer = 0;
-    private Vector3? wallNormal = null;
+    public RaycastHit? WallHit { get; private set; } = null;
+    public float WallRideTime { get { return wallRideTime; } }
+    public float WallRideTimer { get { return wallRideTimer; } }
 
     [Header("Jump Settings")]
     [SerializeField] private float jumpPower = 5;
@@ -92,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         DeadenInputTowardWall(ref inputDir);
 
         //If wall riding, don't use gravity, and vice versa.
-        rb.useGravity = state != PlayerState.WallRiding;
+        rb.useGravity = State != PlayerState.WallRiding;
 
         //Now that we've settled what direction to move in, move in that direction.
         if (inputDir != Vector3.zero) { MoveWithDirection(inputDir.normalized); }
@@ -119,14 +116,14 @@ public class PlayerMovement : MonoBehaviour
         //Also, if on jump cooldown, don't set grounded status, to account for the groundedCheck's leeway.
         if (!onJumpCooldown && groundedCheck && Vector3.Dot(Vector3.up, groundHit.normal) >= 0.25f)
         {
-            state = PlayerState.Grounded;
+            State = PlayerState.Grounded;
         }
 
         //If we're grounded, allow wall riding.
-        if (state == PlayerState.Grounded)
+        if (State == PlayerState.Grounded)
         {
             wallRideTimer = 0;
-            wallNormal = null;
+            WallHit = null;
         }
 
         //Set whether the player can jump or not depending on groundedness, accounting for leeway
@@ -180,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
     private void TryWallRide(ref Vector3 moveDir)
     {
         //If we aren't grounded, haven't exceeded the max wall ride time, and are moving, we could be wall riding.
-        if (state != PlayerState.Grounded && wallRideTimer < wallRideTime && moveDir != Vector3.zero)
+        if (State != PlayerState.Grounded && wallRideTimer < wallRideTime && moveDir != Vector3.zero)
         {
             //Check if there is something in the direction of movement.
             bool castSuccess = Physics.SphereCast
@@ -199,7 +196,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 //Check if we're on jump cooldown before setting our state, to account for the leeway on
                 //the cast above.
-                if (!onJumpCooldown) { state = PlayerState.WallRiding; }
+                if (!onJumpCooldown) { State = PlayerState.WallRiding; }
 
                 //Add to the wall ride timer.
                 wallRideTimer += Time.deltaTime;
@@ -214,13 +211,13 @@ public class PlayerMovement : MonoBehaviour
                 moveDir += towardHit;
 
                 //Save the normal of this wall to a variable in case of wall jumping.
-                wallNormal = hit.normal;
+                WallHit = hit;
 
                 return;
             }
         }
 
-        state = state != PlayerState.WallJumping ? PlayerState.Airborne : state;
+        State = State != PlayerState.WallJumping ? PlayerState.Airborne : State;
     }
 
     private void TryJump()
@@ -233,24 +230,24 @@ public class PlayerMovement : MonoBehaviour
             //This mitigates problems with the leeway on IsGrounded(), which is otherwise necessary.
             StartCoroutine(SetJumpCooldown(jumpCooldownTime));
 
-            //If the state we're jumping from is WallRiding and wallNormal isn't null, then we're jumping off
+            //If the state we're jumping from is WallRiding and wallHit isn't null, then we're jumping off
             //a wall, and we should jump away from that wall.
-            if (lastJumpState == PlayerState.WallRiding && wallNormal is Vector3 normal)
+            if (lastJumpState == PlayerState.WallRiding && WallHit is RaycastHit hit)
             {
                 //Jump up, away from the wall, and in whatever direction we were moving just before this.
-                Vector3 jumpVect = Vector3.up + normal;
+                Vector3 jumpVect = Vector3.up + hit.normal;
                 jumpVect.Normalize();
                 jumpVect *= jumpPower;
                 rb.velocity += new Vector3(jumpVect.x, jumpVect.y, jumpVect.z);
 
-                state = PlayerState.WallJumping;
+                State = PlayerState.WallJumping;
             }
             //Otherwise, just jump up.
             else
             {
                 rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
 
-                state = PlayerState.Airborne;
+                State = PlayerState.Airborne;
             }
 
             //Also expedite the rolling progress during jumps by adding some torque.
@@ -285,14 +282,14 @@ public class PlayerMovement : MonoBehaviour
     {
         //If the player is wall riding, we have the normal of the wall, and the player is moving away 
         //from the wall,
-        if (state == PlayerState.WallRiding && wallNormal is Vector3 normal && Vector3.Dot(normal, moveDir) > 0)
+        if (State == PlayerState.WallRiding && WallHit is RaycastHit hit && Vector3.Dot(hit.normal, moveDir) > 0)
         {
             //Check if the sticky wall timer hasn't exceeded the sticky wall time, and if so,
             if (stickyWallTimer < stickyWallTime)
             {
                 //Subtract the component away from the wall from inputDir and increment the timer.
                 //This makes it so the player sticks to the wall for a bit, to give them leeway for a wall jump.
-                moveDir -= Vector3.Project(moveDir, normal);
+                moveDir -= Vector3.Project(moveDir, hit.normal);
                 stickyWallTimer += Time.deltaTime;
             }
         }
@@ -306,7 +303,7 @@ public class PlayerMovement : MonoBehaviour
     private void DeadenInputTowardWall(ref Vector3 moveDir)
     {
         //If the player is wall jumping,
-        if (state == PlayerState.WallJumping)
+        if (State == PlayerState.WallJumping)
         {
             //Add to the deaden timer.
             wallJumpInputDeadenTimer += Time.deltaTime;
@@ -334,13 +331,13 @@ public class PlayerMovement : MonoBehaviour
     private void SetJumpLeeway()
     {
         //If the player is in a state they can jump from,
-        if (state == PlayerState.Grounded || state == PlayerState.WallRiding)
+        if (State == PlayerState.Grounded || State == PlayerState.WallRiding)
         {
             //Reset the coyote time counter, and make sure the player can jump.
             //They hit the ground, so they're not jumping anymore.
             leewayTimer = 0;
             jumpLeeway = true;
-            lastJumpState = state;
+            lastJumpState = State;
         }
         //If the player is not in a state they can jump from,
         else
