@@ -16,6 +16,7 @@ public class LevelTransitions : MonoBehaviour
     [SerializeField] private Image fadePanel = null;
 
     private bool isFading = false;
+    private bool showingPanel = false;
 
     private void Awake()
     {
@@ -64,6 +65,10 @@ public class LevelTransitions : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ShowPanel(bool levelSuccess)
     {
+        //We don't want to show this level end panel twice, so exit early if we already are showing a panel.
+        if (showingPanel) { yield break; }
+        showingPanel = true;
+
         //Depending on whether the player succeeded, select the right panel to animate.
         RectTransform panelToShow = levelSuccess ? winPanel : losePanel;
 
@@ -126,6 +131,7 @@ public class LevelTransitions : MonoBehaviour
     /// <returns></returns>
     private IEnumerator FadeBetween(Color fromColor, Color toColor, float fadeTime)
     {
+        if (isFading) { yield break; }
         isFading = true;
 
         //Ensure the fade panel is clear and ready to be faded in
