@@ -7,6 +7,16 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private GameObject focalObj = null;
     private Vector3 camOffset;
 
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+
     void Start()
     {
         //Ensure this object has no parents mucking up its transform, so it can move independently.
@@ -27,7 +37,12 @@ public class CameraFollow : MonoBehaviour
                     focalObj.transform.position.z + camOffset.z
                 );
 
-            transform.LookAt(focalObj.transform); 
+            transform.LookAt(focalObj.transform);
         }
+    }
+
+    private void OnLevelEnd(EventDefiner.LevelEnd _)
+    {
+        focalObj = null;
     }
 }
