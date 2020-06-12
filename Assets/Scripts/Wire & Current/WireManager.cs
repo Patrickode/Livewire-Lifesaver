@@ -92,6 +92,14 @@ public class WireManager : MonoBehaviour
                 wireListCopy[i] = currentWire;
                 //Now move onto the next wire by getting the next wire.
                 currentWire = GetNextWire(currentWire);
+
+                //GetNextWire should return null after all of the wires have been found. Warn the user if not.
+                if (!currentWire && i < wireList.Count - 1)
+                {
+                    Debug.LogWarning("WireManager: GetNextWire returned null earlier than expected." +
+                        " Make sure all of the wires are lined up correctly!" +
+                        "\n(The blue axis should point in the direction you want the current to go.)");
+                }
             }
 
             //Finally, now that the copy is properly sorted, set the wireList equal to it.
