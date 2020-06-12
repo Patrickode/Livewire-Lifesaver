@@ -138,9 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c594f6860a3483d4b86860241e5dcddb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  order: 0
   start: {fileID: 3072967543001233325}
   end: {fileID: 3072967541183203067}
+  trigger: {fileID: 0}
   type: 0
   playerClose: 0
 --- !u!1 &3072967543001233322
