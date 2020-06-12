@@ -1421,10 +1421,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6347061574611618361, guid: c661a7e42259851438201c10be0a7a8c,
+    - target: {fileID: 6347061574611618363, guid: c661a7e42259851438201c10be0a7a8c,
         type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
+      propertyPath: fadeOutTime
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6347061574611618364, guid: c661a7e42259851438201c10be0a7a8c,
         type: 3}
