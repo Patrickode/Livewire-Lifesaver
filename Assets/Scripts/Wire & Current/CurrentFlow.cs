@@ -4,18 +4,15 @@ using UnityEngine;
 
 public class CurrentFlow : MonoBehaviour
 {
-    /// <summary>
-    /// The speed of the current as it moves along the wire, roughly in units per second.
-    /// </summary>
-    [Range(0f, 5f)] [SerializeField] private float currentSpeed = 1f;
+    [SerializeField] private GameObject burstPrefab = null;
+    private GameObject player = null;
 
+    [Tooltip("The speed of the current as it moves along the wire, roughly in units per second.")]
+    [Range(0f, 5f)] [SerializeField] private float currentSpeed = 1f;
     /// <summary>
     /// The index the current is currently at in the list of wires.
     /// </summary>
     private int currentIndex;
-
-    private GameObject player;
-
     /// <summary>
     /// Whether the current is transitioning between wires right now.
     /// </summary>
@@ -71,8 +68,8 @@ public class CurrentFlow : MonoBehaviour
         //the win sequence.
         else if (numOfWires > 0)
         {
-            Destroy(gameObject);
             EventDispatcher.Dispatch(new EventDefiner.LevelEnd(true));
+            CurrentBurst();
         }
     }
 
@@ -96,8 +93,8 @@ public class CurrentFlow : MonoBehaviour
             //If they aren't, the current fizzles out. Initiate the losing sequence.
             else
             {
-                Destroy(gameObject);
                 EventDispatcher.Dispatch(new EventDefiner.LevelEnd(false));
+                CurrentBurst();
             }
         }
     }
@@ -148,5 +145,18 @@ public class CurrentFlow : MonoBehaviour
         {
             return Vector3.Lerp(mid, end, (t - 0.5f) * 2f);
         }
+    }
+
+    private void CurrentBurst()
+    {
+        if (burstPrefab)
+        {
+            Instantiate(burstPrefab, gameObject.transform.position, gameObject.transform.rotation);
+        }
+        else
+        {
+            Debug.LogWarning("CurrentFlow: Burst manager was not assigned; cannot do current burst.");
+        }
+        Destroy(gameObject);
     }
 }
