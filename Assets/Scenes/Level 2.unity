@@ -4065,6 +4065,11 @@ PrefabInstance:
       propertyPath: currentSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -7137718218472559349, guid: 0aa668a4413944642b23b365430b47cf,
+        type: 3}
+      propertyPath: normalSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7073486929874105313, guid: 0aa668a4413944642b23b365430b47cf,
         type: 3}
       propertyPath: m_LocalPosition.x

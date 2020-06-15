@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CurrentFlow : MonoBehaviour
 {
@@ -8,7 +9,14 @@ public class CurrentFlow : MonoBehaviour
     private GameObject player = null;
 
     [Tooltip("The speed of the current as it moves along the wire, roughly in units per second.")]
-    [Range(0f, 5f)] [SerializeField] private float currentSpeed = 1f;
+    [FormerlySerializedAs("normalSpeed")] [Range(0f, 5f)] [SerializeField] private float normalSpeed = 1f;
+    [Tooltip("The speed of the current when boosting.")]
+    [Range(0f, 10f)] [SerializeField] private float boostSpeed = 6f;
+    [Tooltip("How long a transition between wires should take in seconds.")]
+    [Range(0f, 1.5f)] [SerializeField] private float transitionLength = 0.5f;
+    private float speed = 0;
+    private bool boosting = false;
+
     /// <summary>
     /// The index the current is currently at in the list of wires.
     /// </summary>
@@ -17,11 +25,16 @@ public class CurrentFlow : MonoBehaviour
     /// Whether the current is transitioning between wires right now.
     /// </summary>
     private bool currentTransitioning;
-    /// <summary>
-    /// How long a transition between wires should take in seconds.
-    /// </summary>
-    [Range(0f, 10f)] [SerializeField] private float transitionLength = 0.5f;
     private float transitionProgress = 0;
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.CurrentBoost>(OnCurrentBoost);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.CurrentBoost>(OnCurrentBoost);
+    }
 
     void Start()
     {
@@ -29,12 +42,16 @@ public class CurrentFlow : MonoBehaviour
         if (!player) { Debug.LogError("CurrentFlow: No player was found. Add a player to the scene."); }
 
         currentIndex = 0;
+        speed = normalSpeed;
 
         WireManager.SortWires();
     }
 
     void Update()
     {
+        //If we're boosting, move at boostSpeed. If not, move at normal speed.
+        speed = boosting ? boostSpeed : normalSpeed;
+
         //If there are wires to follow in the level and if we're not past the last wire,
         int numOfWires = WireManager.GetCount();
         if (numOfWires > 0 && currentIndex < numOfWires)
@@ -47,7 +64,7 @@ public class CurrentFlow : MonoBehaviour
                     (
                         transform.position,
                         WireManager.GetWire(currentIndex).end.position,
-                        currentSpeed * Time.deltaTime
+                        speed * Time.deltaTime
                     );
 
                 //If the current is at the end of the current wire...
@@ -147,6 +164,9 @@ public class CurrentFlow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Make the current destroy itself and burst into particles.
+    /// </summary>
     private void CurrentBurst()
     {
         if (burstPrefab)
@@ -155,8 +175,10 @@ public class CurrentFlow : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("CurrentFlow: Burst manager was not assigned; cannot do current burst.");
+            Debug.LogWarning("CurrentFlow: Burst prefab was not assigned; cannot do current burst.");
         }
         Destroy(gameObject);
     }
+
+    private void OnCurrentBoost(EventDefiner.CurrentBoost evt) { boosting = evt.Boosting; }
 }
