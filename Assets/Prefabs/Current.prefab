@@ -286,7 +286,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 0.4509804}
+      maxColor: {r: 1, g: 1, b: 1, a: 0.5019608}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4882,7 +4882,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   burstPrefab: {fileID: 7312445395985238666, guid: 7cfd941c4b1138345b53015a5a6f8675,
     type: 3}
-  currentSpeed: 1
+  normalSpeed: 1
+  boostSpeed: 6
   transitionLength: 0.15
 --- !u!199 &6347971461090924840
 ParticleSystemRenderer:
