@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class CurrentFlow : MonoBehaviour
 {
     [SerializeField] private GameObject burstPrefab = null;
+    [SerializeField] private GameObject boostEmitter = null;
     private GameObject player = null;
 
     [Tooltip("The speed of the current as it moves along the wire, roughly in units per second.")]
@@ -49,8 +50,10 @@ public class CurrentFlow : MonoBehaviour
 
     void Update()
     {
-        //If we're boosting, move at boostSpeed. If not, move at normal speed.
+        //If we're boosting, move at boostSpeed and enable boost particles. If not, move at normal speed and
+        //disable boost particles.
         speed = boosting ? boostSpeed : normalSpeed;
+        boostEmitter.SetActive(boosting);
 
         //If there are wires to follow in the level and if we're not past the last wire,
         int numOfWires = WireManager.GetCount();
@@ -60,15 +63,18 @@ public class CurrentFlow : MonoBehaviour
             if (!currentTransitioning)
             {
                 //Move the current to towards its destination, the end of the wire it's on.
+                Wire currentWire = WireManager.GetWire(currentIndex);
                 transform.position = Vector3.MoveTowards
                     (
                         transform.position,
-                        WireManager.GetWire(currentIndex).end.position,
+                        currentWire.end.position,
                         speed * Time.deltaTime
                     );
+                //Face in the same direction as the wire we're on.
+                transform.forward = currentWire.transform.forward;
 
                 //If the current is at the end of the current wire...
-                if (transform.position.Equals(WireManager.GetWire(currentIndex).end.position))
+                if (transform.position.Equals(currentWire.end.position))
                 {
                     //Go to the next wire and do all relevant logic.
                     GoToNextWire();
@@ -100,10 +106,11 @@ public class CurrentFlow : MonoBehaviour
         currentIndex++;
 
         //If the wire the current was on just a second ago was broken...
-        if (WireManager.GetWire(currentIndex - 1).type == WireType.BrokenEnd)
+        Wire lastWire = WireManager.GetWire(currentIndex - 1);
+        if (lastWire.type == WireType.BrokenEnd)
         {
             //The player needs to be close for the current to get to the next wire.
-            if (WireManager.GetWire(currentIndex - 1).playerClose)
+            if (lastWire.playerClose)
             {
                 currentTransitioning = true;
             }
@@ -128,19 +135,31 @@ public class CurrentFlow : MonoBehaviour
 
         //Follow a path from the end of the last wire, to the player, to the next wire.
         //It's like it's arcing through the connection the player makes between the wires.
+        Wire lastWire = WireManager.GetWire(currentIndex - 1);
+        Wire currentWire = WireManager.GetWire(currentIndex);
         transform.position = ThreePointLerp
             (
-                WireManager.GetWire(currentIndex - 1).end.position,
+                lastWire.end.position,
                 player.transform.position,
-                WireManager.GetWire(currentIndex).start.position,
+                currentWire.start.position,
                 transitionProgress
             );
+
+        //Rotate to face toward our current destination.
+        if (transitionProgress < 0.5f)
+        {
+            transform.LookAt(player.transform);
+        }
+        else
+        {
+            transform.LookAt(currentWire.start.transform);
+        }
 
         //Once the transition has completed, set the current's position as a failsafe, reset transitionProgress,
         //and not that the transition has ended.
         if (transitionProgress >= 1)
         {
-            transform.position = WireManager.GetWire(currentIndex).start.position;
+            transform.position = currentWire.start.position;
             transitionProgress = 0;
             currentTransitioning = false;
         }
