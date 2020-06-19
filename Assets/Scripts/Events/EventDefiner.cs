@@ -43,4 +43,24 @@ public class EventDefiner : MonoBehaviour
             Boosting = boosting;
         }
     }
+
+    public class MoveInput : GenericEvent
+    {
+        public Vector3 Direction { get; private set; }
+
+        public MoveInput(Vector3 direction)
+        {
+            Direction = direction;
+        }
+    }
+
+    public class JumpInput : GenericEvent
+    {
+        public bool ButtonDown { get; private set; }
+
+        public JumpInput(bool buttonDown)
+        {
+            ButtonDown = buttonDown;
+        }
+    }
 }
