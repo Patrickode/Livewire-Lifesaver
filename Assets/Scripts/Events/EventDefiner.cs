@@ -56,11 +56,13 @@ public class EventDefiner : MonoBehaviour
 
     public class JumpInput : GenericEvent
     {
-        public bool ButtonDown { get; private set; }
+        public bool PressedThisFrame { get; private set; }
+        public bool IsHeld { get; private set; }
 
-        public JumpInput(bool buttonDown)
+        public JumpInput(bool pressedThisFrame, bool isHeld)
         {
-            ButtonDown = buttonDown;
+            PressedThisFrame = pressedThisFrame;
+            IsHeld = isHeld;
         }
     }
 }
