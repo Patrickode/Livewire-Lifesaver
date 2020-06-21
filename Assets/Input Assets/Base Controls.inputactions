@@ -10,7 +10,7 @@
                     "type": "Value",
                     "id": "f6d8b4de-8876-4cd4-a647-22fa226bc600",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": ""
                 },
                 {
@@ -26,7 +26,7 @@
                     "type": "Value",
                     "id": "93aefb34-d025-48c6-a22a-02c51eba1e59",
                     "expectedControlType": "Axis",
-                    "processors": "",
+                    "processors": "Normalize(min=-1,max=1)",
                     "interactions": ""
                 },
                 {

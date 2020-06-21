@@ -65,4 +65,14 @@ public class EventDefiner : MonoBehaviour
             IsHeld = isHeld;
         }
     }
+
+    public class SwivelInput : GenericEvent
+    {
+        public float Magnitude { get; private set; }
+
+        public SwivelInput(float magnitude)
+        {
+            Magnitude = magnitude;
+        }
+    }
 }
