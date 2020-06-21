@@ -75,4 +75,16 @@ public class EventDefiner : MonoBehaviour
             Magnitude = magnitude;
         }
     }
+
+    public class BoostInput : GenericEvent
+    {
+        public bool PressedThisFrame { get; private set; }
+        public bool IsHeld { get; private set; }
+
+        public BoostInput(bool pressedThisFrame, bool isHeld)
+        {
+            PressedThisFrame = pressedThisFrame;
+            IsHeld = isHeld;
+        }
+    }
 }

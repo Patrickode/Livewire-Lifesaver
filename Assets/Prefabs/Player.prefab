@@ -4991,11 +4991,33 @@ MonoBehaviour:
     m_ActionId: 947f31f2-d538-4cb2-876e-be8904da2af1
     m_ActionName: Basic Control/Jump[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7485027329645131562}
+        m_MethodName: GetSwivelInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 93aefb34-d025-48c6-a22a-02c51eba1e59
     m_ActionName: Basic Control/Camera Swivel[/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7485027329645131562}
+        m_MethodName: GetBoostInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 75685418-9fb4-4f7f-a7a8-7caf8b8264a1
     m_ActionName: Basic Control/Boost Current[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0

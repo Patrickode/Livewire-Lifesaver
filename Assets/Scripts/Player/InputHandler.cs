@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     private bool jumpHeld = false;
+    private bool boostHeld = false;
 
     /// <summary>
     /// Checks if an input is held using a callback context.
@@ -38,12 +39,21 @@ public class InputHandler : MonoBehaviour
         //Check if jump is held, and store the result in jumpHeld.
         CheckIfHeld(ref jumpHeld, context);
 
-        //Note whether jump input started this frame, and whether jump input is held this frame.
+        //Send info about whether jump input started this frame, and whether jump input is held this frame.
         EventDispatcher.Dispatch(new EventDefiner.JumpInput(context.started, jumpHeld));
     }
 
     public void GetSwivelInput(InputAction.CallbackContext context)
     {
         EventDispatcher.Dispatch(new EventDefiner.SwivelInput(context.ReadValue<float>()));
+    }
+
+    public void GetBoostInput(InputAction.CallbackContext context)
+    {
+        //Check if boost is held, and store the result in boostHeld.
+        CheckIfHeld(ref boostHeld, context);
+
+        //Send info about whether boost input started this frame, and whether boost input is held this frame.
+        EventDispatcher.Dispatch(new EventDefiner.JumpInput(context.started, boostHeld));
     }
 }
