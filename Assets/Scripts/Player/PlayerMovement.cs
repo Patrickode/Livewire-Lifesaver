@@ -234,7 +234,7 @@ public class PlayerMovement : MonoBehaviour
             //a wall, and we should jump away from that wall.
             if (lastJumpState == PlayerState.WallRiding && WallHit is RaycastHit hit)
             {
-                //Jump up, away from the wall, and in whatever direction we were moving just before this.
+                //Jump up and away from the wall.
                 Vector3 jumpVect = Vector3.up + hit.normal;
                 jumpVect.Normalize();
                 jumpVect *= jumpPower;
