@@ -51,32 +51,39 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpBuffered;
     private Coroutine jumpBufferCoroutine;
 
+    private Vector3 moveInputVector;
+    private bool jumpPressedThisFrame;
+    private bool jumpInputHeld;
+
+    //--- Input Getters ---//
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.MoveInput>(GetMoveInput);
+        EventDispatcher.AddListener<EventDefiner.JumpInput>(GetJumpInput);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.MoveInput>(GetMoveInput);
+        EventDispatcher.RemoveListener<EventDefiner.JumpInput>(GetJumpInput);
+    }
+
+    private void GetMoveInput(EventDefiner.MoveInput evt)
+    {
+        moveInputVector = evt.Direction;
+    }
+    private void GetJumpInput(EventDefiner.JumpInput evt)
+    {
+        jumpPressedThisFrame = evt.PressedThisFrame;
+        jumpInputHeld = evt.IsHeld;
+    }
+
     //--- Update Functions --- //
 
     void FixedUpdate()
     {
-        //Set up a movement vector.
-        Vector3 inputDir = Vector3.zero;
-
-        //If the WASD keys are held, add the corresponding direction to the move direction.
-        if (Input.GetKey(KeyCode.W))
-        {
-            inputDir += orienter.transform.forward;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            inputDir += -orienter.transform.right;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            inputDir += -orienter.transform.forward;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            inputDir += orienter.transform.right;
-        }
-
-        //Now that input direction has been collected, adjust it depending on circumstance.
+        //Set up a movement vector relative to the orienter using the automatically updated moveInputVector.
+        Vector3 inputDir = orienter.transform.TransformDirection(moveInputVector);
 
         //Update sticky wall status, which allows some leeway for wall jumping.
         StickyWalls(ref inputDir);
@@ -85,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
         TryWallRide(ref inputDir);
 
         //Deaden input for a bit after wall jumping. This prevents wall jumps from getting
-        //stuffed out, and prevents funky behavior like wall climbing by mashing jump.
+        //stuffed out by user input, and prevents funky behavior like wall climbing by mashing jump.
         DeadenInputTowardWall(ref inputDir);
 
         //If wall riding, don't use gravity, and vice versa.
@@ -131,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
         //If the user presses space, (re)start the buffer coroutine (if it's running)
         //This "saves" the button press so the player can press jump early and still have the jump happen
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (jumpPressedThisFrame)
         {
             if (jumpBufferCoroutine != null) { StopCoroutine(jumpBufferCoroutine); }
             jumpBufferCoroutine = StartCoroutine(CheckForBufferedJump(jumpBufferTime));
@@ -264,7 +271,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //If the player isn't holding space after they jump, and they haven't hit the peak of their jump yet,
         //increase gravity to allow for a short hop
-        if (!Input.GetKey(KeyCode.Space) && rb.velocity.y > 0)
+        if (!jumpInputHeld && rb.velocity.y > 0)
         {
             //We subtract fallGrav by 1 because gravity is already added once per frame; to make fallGrav
             //accurate, we need to subtract it by 1. fallGrav can't be 1 due to its range property, so no zeroes
@@ -372,7 +379,7 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="bufferTime">How long to "hold on to" the player's input.</param>
     private IEnumerator CheckForBufferedJump(float bufferTime)
     {
-        if (!jumpBuffered && Input.GetKeyDown(KeyCode.Space))
+        if (!jumpBuffered)
         {
             jumpBuffered = true;
             yield return new WaitForSeconds(bufferTime);

@@ -34,16 +34,6 @@ public class EventDefiner : MonoBehaviour
         public MenuSwap() { }
     }
 
-    public class CurrentBoost : GenericEvent
-    {
-        public bool Boosting { get; private set; }
-
-        public CurrentBoost(bool boosting)
-        {
-            Boosting = boosting;
-        }
-    }
-
     public class MoveInput : GenericEvent
     {
         public Vector3 Direction { get; private set; }

@@ -8,6 +8,20 @@ public class InputHandler : MonoBehaviour
     private bool jumpHeld = false;
     private bool boostHeld = false;
 
+    private bool levelEnding = false;
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+    }
+    private void OnLevelEnd(EventDefiner.LevelEnd _)
+    {
+        levelEnding = true;
+    }
+
     /// <summary>
     /// Checks if an input is held using a callback context.
     /// </summary>
@@ -53,7 +67,12 @@ public class InputHandler : MonoBehaviour
         //Check if boost is held, and store the result in boostHeld.
         CheckIfHeld(ref boostHeld, context);
 
-        //Send info about whether boost input started this frame, and whether boost input is held this frame.
-        EventDispatcher.Dispatch(new EventDefiner.JumpInput(context.started, boostHeld));
+        //We only need to dispatch an event if the level isn't ending, though; the current will never be alive
+        //when the level is ending.
+        if (!levelEnding)
+        {
+            //Send info about whether boost input started this frame, and whether boost input is held this frame.
+            EventDispatcher.Dispatch(new EventDefiner.BoostInput(context.started, boostHeld));
+        }
     }
 }
