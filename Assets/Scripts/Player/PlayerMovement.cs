@@ -136,10 +136,13 @@ public class PlayerMovement : MonoBehaviour
         //Set whether the player can jump or not depending on groundedness, accounting for leeway
         SetJumpLeeway();
 
-        //If the user presses space, (re)start the buffer coroutine (if it's running)
+        //If the user presses the jump button, (re)start the buffer coroutine (if it's running)
         //This "saves" the button press so the player can press jump early and still have the jump happen
         if (jumpPressedThisFrame)
         {
+            //Reset jumpPressedThisFrame because it is not automatically updated; jump input events are only
+            //fired on press and release, not in between.
+            jumpPressedThisFrame = false;
             if (jumpBufferCoroutine != null) { StopCoroutine(jumpBufferCoroutine); }
             jumpBufferCoroutine = StartCoroutine(CheckForBufferedJump(jumpBufferTime));
         }
@@ -269,7 +272,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void AddJumpGravity()
     {
-        //If the player isn't holding space after they jump, and they haven't hit the peak of their jump yet,
+        //If the player isn't holding jump input after they jump, and they haven't hit the peak of their jump yet,
         //increase gravity to allow for a short hop
         if (!jumpInputHeld && rb.velocity.y > 0)
         {
