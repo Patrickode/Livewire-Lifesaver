@@ -32,11 +32,14 @@ public class MenuButtons : MonoBehaviour
 
     public void SwapMenu(GameObject destination)
     {
-        EventDispatcher.Dispatch(new EventDefiner.MenuSwap());
+        if (destination)
+        {
+            EventDispatcher.Dispatch(new EventDefiner.MenuSwap());
 
-        //Make destination active, and the current menu inactive. Destination is now the current menu.
-        destination.SetActive(true);
-        currentMenu.SetActive(false);
-        currentMenu = destination;
+            //Make destination active, and the current menu inactive. Destination is now the current menu.
+            destination.SetActive(true);
+            currentMenu.SetActive(false);
+            currentMenu = destination;
+        }
     }
 }
