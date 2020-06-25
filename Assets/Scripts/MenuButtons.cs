@@ -5,9 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class MenuButtons : MonoBehaviour
 {
-    public GameObject menuContainer;
-    public GameObject howToPlayContainer;
-    private bool showMenu = true;
+    private GameObject currentMenu = null;
+
+    private void Start()
+    {
+        //Get all children of the canvas, and make the first active menu the currentMenu.
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeInHierarchy && child.CompareTag("Menu"))
+            {
+                currentMenu = child.gameObject;
+                break;
+            }
+        }
+    }
 
     public void LoadScene(int index)
     {
@@ -19,21 +30,13 @@ public class MenuButtons : MonoBehaviour
         Application.Quit();
     }
 
-    public void ToggleMenu()
+    public void SwapMenu(GameObject destination)
     {
         EventDispatcher.Dispatch(new EventDefiner.MenuSwap());
 
-        if (showMenu)
-        {
-            showMenu = false;
-            menuContainer.SetActive(false);
-            howToPlayContainer.SetActive(true);
-        }
-        else
-        {
-            showMenu = true;
-            menuContainer.SetActive(true);
-            howToPlayContainer.SetActive(false);
-        }
+        //Make destination active, and the current menu inactive. Destination is now the current menu.
+        destination.SetActive(true);
+        currentMenu.SetActive(false);
+        currentMenu = destination;
     }
 }
