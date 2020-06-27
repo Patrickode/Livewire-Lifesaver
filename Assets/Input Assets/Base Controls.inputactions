@@ -40,17 +40,6 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "cb6ed2d9-7bf9-4e98-adc8-67096cb0ee7d",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "WASD",
                     "id": "d7ea88c7-6b8c-425d-bca0-7c1f3571aa34",
                     "path": "2DVector",
@@ -107,12 +96,12 @@
                 },
                 {
                     "name": "",
-                    "id": "f8076ae2-9f29-4fd1-9498-5849c2729d37",
-                    "path": "<Gamepad>/rightStick/x",
+                    "id": "cb6ed2d9-7bf9-4e98-adc8-67096cb0ee7d",
+                    "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Camera Swivel",
+                    "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -151,12 +140,12 @@
                 },
                 {
                     "name": "",
-                    "id": "35d7e301-95cc-4737-a293-3e4b9ff387e3",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "Press(behavior=1)",
+                    "id": "f8076ae2-9f29-4fd1-9498-5849c2729d37",
+                    "path": "<Gamepad>/rightStick/x",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Jump",
+                    "action": "Camera Swivel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -173,12 +162,12 @@
                 },
                 {
                     "name": "",
-                    "id": "0544fd3a-7026-4a1a-9871-d8ca3387c77a",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "35d7e301-95cc-4737-a293-3e4b9ff387e3",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Boost Current",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -189,6 +178,17 @@
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "Keyboard",
+                    "action": "Boost Current",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0544fd3a-7026-4a1a-9871-d8ca3387c77a",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Boost Current",
                     "isComposite": false,
                     "isPartOfComposite": false
