@@ -411,7 +411,7 @@ Transform:
   - {fileID: 1754640214}
   - {fileID: 1537202842}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &611305365
 PrefabInstance:
@@ -424,6 +424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PauseCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1086037439993990841, guid: 7243f3be6810f78419b7200039285d28,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1086037439993990845, guid: 7243f3be6810f78419b7200039285d28,
         type: 3}
@@ -463,7 +468,7 @@ PrefabInstance:
     - target: {fileID: 1086037439993990845, guid: 7243f3be6810f78419b7200039285d28,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1086037439993990845, guid: 7243f3be6810f78419b7200039285d28,
         type: 3}
@@ -568,7 +573,7 @@ Transform:
   - {fileID: 61421914}
   - {fileID: 24329213}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &624505149
 PrefabInstance:
@@ -1475,7 +1480,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh56972
+  m_Name: pb_Mesh77848
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2109,7 +2114,7 @@ PrefabInstance:
     - target: {fileID: 4424758910931098415, guid: 3f5d134f434160e4cb38ca72795c0fa0,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4424758910931098415, guid: 3f5d134f434160e4cb38ca72795c0fa0,
         type: 3}
@@ -2383,7 +2388,7 @@ PrefabInstance:
     - target: {fileID: 7073486929874105313, guid: 0aa668a4413944642b23b365430b47cf,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7073486929874105313, guid: 0aa668a4413944642b23b365430b47cf,
         type: 3}
@@ -2487,7 +2492,7 @@ PrefabInstance:
     - target: {fileID: 8404675213198702976, guid: b512f4094c5f39944a2d13c032c29ae2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8404675213198702976, guid: b512f4094c5f39944a2d13c032c29ae2,
         type: 3}
@@ -2566,7 +2571,7 @@ PrefabInstance:
     - target: {fileID: 8662961000165537292, guid: dc9e82f1a2a8b6c489bcf7c3942dd7cd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8662961000165537292, guid: dc9e82f1a2a8b6c489bcf7c3942dd7cd,
         type: 3}

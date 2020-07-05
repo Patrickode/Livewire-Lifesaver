@@ -86,7 +86,7 @@ public class LevelTransitions : MonoBehaviour
         while (progress < 1)
         {
             //Move progress forward a step, then interpolate between our points using it
-            progress += Time.unscaledDeltaTime / panelAnimTime;
+            progress += Time.deltaTime / panelAnimTime;
             float newY = Mathf.SmoothStep(offsetPos.y, originalPos.y, progress);
 
             panelToShow.anchoredPosition = new Vector2(originalPos.x, newY);
@@ -104,7 +104,7 @@ public class LevelTransitions : MonoBehaviour
         while (progress < 1)
         {
             //Move progress forward a step, then interpolate between our points using it
-            progress += Time.unscaledDeltaTime / panelAnimTime;
+            progress += Time.deltaTime / panelAnimTime;
             float newY = Mathf.SmoothStep(originalPos.y, offsetPos.y, progress);
 
             panelToShow.anchoredPosition = new Vector2(originalPos.x, newY);
@@ -142,7 +142,7 @@ public class LevelTransitions : MonoBehaviour
         float progress = 0f;
         while (progress < 1)
         {
-            progress += Time.unscaledDeltaTime / fadeTime;
+            progress += Time.deltaTime / fadeTime;
             fadePanel.color = Color.Lerp(fromColor, toColor, progress);
             yield return null;
         }
