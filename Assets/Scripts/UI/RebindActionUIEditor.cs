@@ -2,13 +2,12 @@
 using System.Linq;
 using UnityEditor;
 
-////TODO: support multi-object editing
-
 namespace UnityEngine.InputSystem.Samples.RebindUI
 {
     /// <summary>
     /// A custom inspector for <see cref="RebindActionUI"/> which provides a more convenient way for
     /// picking the binding which to rebind.
+    /// Taken from Unity's RebindingUI Sample.
     /// </summary>
     [CustomEditor(typeof(RebindActionUI))]
     public class RebindActionUIEditor : UnityEditor.Editor
@@ -19,6 +18,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_BindingIdProperty = serializedObject.FindProperty("m_BindingId");
             m_ActionLabelProperty = serializedObject.FindProperty("m_ActionLabel");
             m_BindingTextProperty = serializedObject.FindProperty("m_BindingText");
+            m_RebindOverlayProperty = serializedObject.FindProperty("m_RebindOverlay");
+            m_RebindTextProperty = serializedObject.FindProperty("m_RebindText");
             m_UpdateBindingUIEventProperty = serializedObject.FindProperty("m_UpdateBindingUIEvent");
             m_RebindStartEventProperty = serializedObject.FindProperty("m_RebindStartEvent");
             m_RebindStopEventProperty = serializedObject.FindProperty("m_RebindStopEvent");
@@ -58,6 +59,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             {
                 EditorGUILayout.PropertyField(m_ActionLabelProperty);
                 EditorGUILayout.PropertyField(m_BindingTextProperty);
+                EditorGUILayout.PropertyField(m_RebindOverlayProperty);
+                EditorGUILayout.PropertyField(m_RebindTextProperty);
             }
 
             // Events section.
@@ -149,6 +152,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
         private SerializedProperty m_BindingIdProperty;
         private SerializedProperty m_ActionLabelProperty;
         private SerializedProperty m_BindingTextProperty;
+        private SerializedProperty m_RebindOverlayProperty;
+        private SerializedProperty m_RebindTextProperty;
         private SerializedProperty m_RebindStartEventProperty;
         private SerializedProperty m_RebindStopEventProperty;
         private SerializedProperty m_UpdateBindingUIEventProperty;

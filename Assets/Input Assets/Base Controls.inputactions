@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Camera Swivel",
+                    "name": "Swivel Camera",
                     "type": "Value",
                     "id": "93aefb34-d025-48c6-a22a-02c51eba1e59",
                     "expectedControlType": "Axis",
@@ -112,7 +112,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera Swivel",
+                    "action": "Swivel Camera",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -123,7 +123,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Camera Swivel",
+                    "action": "Swivel Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -134,7 +134,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Camera Swivel",
+                    "action": "Swivel Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -145,7 +145,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Camera Swivel",
+                    "action": "Swivel Camera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
