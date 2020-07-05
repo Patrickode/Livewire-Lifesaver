@@ -77,4 +77,19 @@ public class EventDefiner : MonoBehaviour
             IsHeld = isHeld;
         }
     }
+
+    public class PauseInput : GenericEvent
+    {
+        public bool Paused { get; private set; }
+
+        public PauseInput(bool paused)
+        {
+            Paused = paused;
+        }
+    }
+
+    public class PauseMenuResumeClicked : GenericEvent
+    {
+        public PauseMenuResumeClicked() { }
+    }
 }

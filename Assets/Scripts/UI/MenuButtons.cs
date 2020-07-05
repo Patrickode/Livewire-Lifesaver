@@ -10,6 +10,15 @@ public class MenuButtons : MonoBehaviour
     private GameObject currentMenu = null;
     private GameObject defaultMenu = null;
 
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.PauseInput>(OnPauseInput);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.PauseInput>(OnPauseInput);
+    }
+
     /// <summary>
     /// Goes through all of this object's children, and sets currentMenu equal to the first active menu.
     /// Also sets defaultMenu the first time through.
@@ -62,7 +71,12 @@ public class MenuButtons : MonoBehaviour
         }
     }
 
-    public void SetMenuActive(bool active)
+    public void ResumeGame()
+    {
+        EventDispatcher.Dispatch(new EventDefiner.PauseMenuResumeClicked());
+        SetMenuActive(false);
+    }
+    private void SetMenuActive(bool active)
     {
         if (menuObject) { menuObject.SetActive(active); }
 
@@ -74,4 +88,5 @@ public class MenuButtons : MonoBehaviour
             currentMenu = defaultMenu;
         }
     }
+    private void OnPauseInput(EventDefiner.PauseInput evt) { SetMenuActive(evt.Paused); }
 }

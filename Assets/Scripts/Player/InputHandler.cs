@@ -8,14 +8,17 @@ public class InputHandler : MonoBehaviour
     private bool jumpHeld = false;
     private bool boostHeld = false;
     private bool levelEnding = false;
+    private bool paused = false;
 
     private void Awake()
     {
         EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.AddListener<EventDefiner.PauseMenuResumeClicked>(OnResumeClicked);
     }
     private void OnDestroy()
     {
         EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.RemoveListener<EventDefiner.PauseMenuResumeClicked>(OnResumeClicked);
     }
     private void OnLevelEnd(EventDefiner.LevelEnd _)
     {
@@ -75,4 +78,15 @@ public class InputHandler : MonoBehaviour
             EventDispatcher.Dispatch(new EventDefiner.BoostInput(context.started, boostHeld));
         }
     }
+
+    public void GetPauseInput(InputAction.CallbackContext context)
+    {
+        //Only follow through with the pause input if the level is still going.
+        if (!levelEnding)
+        {
+            paused = !paused;
+            EventDispatcher.Dispatch(new EventDefiner.PauseInput(paused));
+        }
+    }
+    private void OnResumeClicked(EventDefiner.PauseMenuResumeClicked evt) { paused = false; }
 }
