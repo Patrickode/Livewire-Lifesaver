@@ -7,8 +7,8 @@ public class InputHandler : MonoBehaviour
 {
     private bool jumpHeld = false;
     private bool boostHeld = false;
-
     private bool levelEnding = false;
+
     private void Awake()
     {
         EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);

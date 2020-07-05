@@ -647,7 +647,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 3180912652747909284}
-  - {fileID: 6712892943829691671}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -711,6 +710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c4009d9c36d114cab8b57828ff93e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuObject: {fileID: 4711642110250160101}
 --- !u!1 &1086037441155023059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,9 +1245,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1879168474583182460}
+        m_MethodName: SetMenuActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1404,12 +1404,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4346954098965706313}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1086037439993990845}
-  m_RootOrder: 1
+  m_Father: {fileID: 3180912652747909284}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4870859129203038102
 MonoBehaviour:
@@ -1495,6 +1495,7 @@ RectTransform:
   m_Children:
   - {fileID: 1086037441155023060}
   - {fileID: 3188281857568361716}
+  - {fileID: 6712892943829691671}
   m_Father: {fileID: 1086037439993990845}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
