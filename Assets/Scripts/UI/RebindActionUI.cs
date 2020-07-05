@@ -377,10 +377,16 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         }
                     });
 
-            // If it's a part binding, show the name of the part in the UI.
+            // Show the name of the part in the UI.
             var partName = default(string);
             if (action.bindings[bindingIndex].isPartOfComposite)
+            {
                 partName = $"Binding to '{action.bindings[bindingIndex].name}.'\n";
+            }
+            else
+            {
+                partName = $"Binding to '{action.name}.'\n";
+            }
 
             // Bring up rebind overlay, if we have one.
             if (m_RebindOverlay)
