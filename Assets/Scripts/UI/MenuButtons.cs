@@ -15,7 +15,7 @@ public class MenuButtons : MonoBehaviour
             if (child.gameObject.activeInHierarchy && child.CompareTag("Menu"))
             {
                 currentMenu = child.gameObject;
-                break;
+                return;
             }
         }
     }
