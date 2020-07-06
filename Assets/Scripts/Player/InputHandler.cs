@@ -7,23 +7,23 @@ public class InputHandler : MonoBehaviour
 {
     private bool jumpHeld = false;
     private bool boostHeld = false;
-    private bool levelEnding = false;
+    private bool levelTransitioning = false;
     private bool paused = false;
 
     private void Awake()
     {
-        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelTransition);
+        EventDispatcher.AddListener<EventDefiner.MenuExit>(OnLevelTransition);
         EventDispatcher.AddListener<EventDefiner.PauseMenuResumeClicked>(OnResumeClicked);
     }
     private void OnDestroy()
     {
-        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
+        EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelTransition);
+        EventDispatcher.RemoveListener<EventDefiner.MenuExit>(OnLevelTransition);
         EventDispatcher.RemoveListener<EventDefiner.PauseMenuResumeClicked>(OnResumeClicked);
     }
-    private void OnLevelEnd(EventDefiner.LevelEnd _)
-    {
-        levelEnding = true;
-    }
+    private void OnLevelTransition(EventDefiner.LevelEnd _) { levelTransitioning = true; }
+    private void OnLevelTransition(EventDefiner.MenuExit _) { levelTransitioning = true; }
 
     /// <summary>
     /// Checks if an input is held using a callback context.
@@ -70,9 +70,9 @@ public class InputHandler : MonoBehaviour
         //Check if boost is held, and store the result in boostHeld.
         CheckIfHeld(ref boostHeld, context);
 
-        //We only need to dispatch an event if the level isn't ending, though; the current will never be alive
-        //when the level is ending.
-        if (!levelEnding)
+        //We only need to dispatch an event if the level isn't transitioning, though; the current will never
+        //be alive when the level is ending.
+        if (!levelTransitioning)
         {
             //Send info about whether boost input started this frame, and whether boost input is held this frame.
             EventDispatcher.Dispatch(new EventDefiner.BoostInput(context.started, boostHeld));
@@ -81,8 +81,9 @@ public class InputHandler : MonoBehaviour
 
     public void GetPauseInput(InputAction.CallbackContext context)
     {
+        //If the button was pressed, send the pause event and note that the game is paused.
         //Only follow through with the pause input if the level is still going.
-        if (!levelEnding)
+        if (!levelTransitioning && context.performed)
         {
             paused = !paused;
             EventDispatcher.Dispatch(new EventDefiner.PauseInput(paused));
