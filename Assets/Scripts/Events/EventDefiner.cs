@@ -31,7 +31,12 @@ public class EventDefiner : MonoBehaviour
 
     public class MenuSwap : GenericEvent
     {
-        public MenuSwap() { }
+        public bool ShouldFlash { get; private set; }
+
+        public MenuSwap(bool shouldFlash)
+        {
+            ShouldFlash = shouldFlash;
+        }
     }
 
     public class MoveInput : GenericEvent
@@ -78,18 +83,13 @@ public class EventDefiner : MonoBehaviour
         }
     }
 
-    public class PauseInput : GenericEvent
+    public class PauseStateChange : GenericEvent
     {
         public bool Paused { get; private set; }
 
-        public PauseInput(bool paused)
+        public PauseStateChange(bool paused)
         {
             Paused = paused;
         }
-    }
-
-    public class PauseMenuResumeClicked : GenericEvent
-    {
-        public PauseMenuResumeClicked() { }
     }
 }

@@ -638,7 +638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c4009d9c36d114cab8b57828ff93e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuObject: {fileID: 4711642110250160101}
 --- !u!114 &895272545473306005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,6 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a8688f8400b2543bfd543234428d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 4711642110250160101}
 --- !u!1 &1086037441155023059
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,21 +924,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1879168474583182460}
-        m_MethodName: SwapMenu
+        m_MethodName: SelectAfterSwap
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1086037441155023059}
+          m_ObjectArgument: {fileID: 7824447795115486649}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4870859129203038102}
-        m_MethodName: SetSelectedGameObject
+      - m_Target: {fileID: 1879168474583182460}
+        m_MethodName: SwapMenu
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 7824447795115486649}
+          m_ObjectArgument: {fileID: 1086037441155023059}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -1412,7 +1412,7 @@ MonoBehaviour:
     type: 3}
   m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018,
     type: 3}
-  m_DeselectOnBackgroundClick: 1
+  m_DeselectOnBackgroundClick: 0
   m_PointerBehavior: 0
 --- !u!1 &4711642110250160101
 GameObject:
@@ -1426,7 +1426,7 @@ GameObject:
   - component: {fileID: 3291477014914116431}
   - component: {fileID: 5938209427098919229}
   m_Layer: 5
-  m_Name: Overlay
+  m_Name: PauseOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1475,7 +1475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.25, g: 0.25, b: 0.25, a: 0.5019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.2509804}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2294,17 +2294,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 4870859129203038102}
-        m_MethodName: SetSelectedGameObject
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 3030554452030878155}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &7924915943480736582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2653,6 +2642,16 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1946930483830849606, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindOverlay
+      value: 
+      objectReference: {fileID: 509930511886501096}
+    - target: {fileID: 1946930483830849606, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindText
+      value: 
+      objectReference: {fileID: 3773918180657487265}
     - target: {fileID: 3075910778838822740, guid: d7d80104d1429dd4eb5d67fe431eb57b,
         type: 3}
       propertyPath: m_Name
@@ -3028,6 +3027,46 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7642862589314565802, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindOverlay
+      value: 
+      objectReference: {fileID: 509930511886501096}
+    - target: {fileID: 7642862589314565802, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindText
+      value: 
+      objectReference: {fileID: 3773918180657487265}
+    - target: {fileID: 7642862589466326256, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindOverlay
+      value: 
+      objectReference: {fileID: 509930511886501096}
+    - target: {fileID: 7642862589466326256, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindText
+      value: 
+      objectReference: {fileID: 3773918180657487265}
+    - target: {fileID: 7642862590718996433, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindOverlay
+      value: 
+      objectReference: {fileID: 509930511886501096}
+    - target: {fileID: 7642862590718996433, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindText
+      value: 
+      objectReference: {fileID: 3773918180657487265}
+    - target: {fileID: 7642862591322414506, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindOverlay
+      value: 
+      objectReference: {fileID: 509930511886501096}
+    - target: {fileID: 7642862591322414506, guid: d7d80104d1429dd4eb5d67fe431eb57b,
+        type: 3}
+      propertyPath: m_RebindText
+      value: 
+      objectReference: {fileID: 3773918180657487265}
     - target: {fileID: 7669244047262707081, guid: d7d80104d1429dd4eb5d67fe431eb57b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3138,12 +3177,6 @@ PrefabInstance:
 --- !u!224 &6357287071630237671 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7669244047262707081, guid: d7d80104d1429dd4eb5d67fe431eb57b,
-    type: 3}
-  m_PrefabInstance: {fileID: 3627436448454242926}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3030554452030878155 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1754590814403298213, guid: d7d80104d1429dd4eb5d67fe431eb57b,
     type: 3}
   m_PrefabInstance: {fileID: 3627436448454242926}
   m_PrefabAsset: {fileID: 0}

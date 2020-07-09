@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LevelTransitions : MonoBehaviour
 {
-    [SerializeField] [Range(0.01f, 2f)] float panelAnimTime = 1f;
-    [SerializeField] [Range(0.01f, 1f)] float fadeInTime = 0.1f;
-    [SerializeField] [Range(0.01f, 5f)] float fadeOutTime = 2.5f;
-
+    [SerializeField] [Range(0.01f, 2f)] private float panelAnimTime = 1f;
+    [SerializeField] [Range(0.01f, 1f)] private float fadeInTime = 0.1f;
+    [SerializeField] [Range(0.01f, 5f)] private float levelFadeOutTime = 2.5f;
+    [SerializeField] [Range(0.01f, 5f)] private float menuFadeOutTime = 1.25f;
     [SerializeField] private RectTransform winPanel = null;
     [SerializeField] private RectTransform losePanel = null;
     [SerializeField] private Image fadePanel = null;
@@ -40,7 +41,7 @@ public class LevelTransitions : MonoBehaviour
     private void OnLevelEnd(EventDefiner.LevelEnd evt)
     {
         StartCoroutine(ShowPanel(evt.LevelSuccess));
-        StartCoroutine(FadeBetween(Color.clear, Color.black, fadeOutTime));
+        StartCoroutine(FadeBetween(Color.clear, Color.black, levelFadeOutTime));
     }
 
     private void OnMenuExit(EventDefiner.MenuExit evt)
@@ -49,13 +50,16 @@ public class LevelTransitions : MonoBehaviour
     }
     private IEnumerator LoadSceneAfterFade(int sceneIndex)
     {
-        yield return StartCoroutine(FadeBetween(Color.clear, Color.black, fadeOutTime));
+        yield return StartCoroutine(FadeBetween(Color.clear, Color.black, menuFadeOutTime));
         SceneManager.LoadScene(sceneIndex);
     }
 
-    private void OnMenuSwap(EventDefiner.MenuSwap _)
+    private void OnMenuSwap(EventDefiner.MenuSwap evt)
     {
-        StartCoroutine(FadeBetween(Color.white, new Color(1, 1, 1, 0), fadeInTime));
+        if (evt.ShouldFlash)
+        {
+            StartCoroutine(FadeBetween(Color.white, new Color(1, 1, 1, 0), fadeInTime));
+        }
     }
 
     /// <summary>
@@ -138,11 +142,14 @@ public class LevelTransitions : MonoBehaviour
         fadePanel.color = fromColor;
         fadePanel.gameObject.SetActive(true);
 
+        //Wait a few frames to let unscaledDeltaTime even out; it doesn't work properly on scene startup otherwise
+        for (int i = 0; i < 5; i++) { yield return new WaitForEndOfFrame(); }
+
         //Set up a progress variable and gradually lerp the fade panel's opacity
         float progress = 0f;
         while (progress < 1)
         {
-            progress += Time.deltaTime / fadeTime;
+            progress += Time.unscaledDeltaTime / fadeTime;
             fadePanel.color = Color.Lerp(fromColor, toColor, progress);
             yield return null;
         }
