@@ -5,10 +5,6 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-    [Tooltip("An action from the action map this script deals with. Any action from the action map will do." +
-        "\n(You can't get a reference to an action map directly, as far as I know.)")]
-    [SerializeField] private InputActionReference inputActionFromMap = null;
-    private InputActionMap inputActions = null;
     private bool jumpHeld = false;
     private bool boostHeld = false;
     private bool levelTransitioning = false;
@@ -17,41 +13,14 @@ public class InputHandler : MonoBehaviour
     {
         EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelTransition);
         EventDispatcher.AddListener<EventDefiner.MenuExit>(OnLevelTransition);
-        EventDispatcher.AddListener<EventDefiner.PauseStateChange>(OnPauseStateChange);
     }
     private void OnDestroy()
     {
         EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelTransition);
         EventDispatcher.RemoveListener<EventDefiner.MenuExit>(OnLevelTransition);
-        EventDispatcher.RemoveListener<EventDefiner.PauseStateChange>(OnPauseStateChange);
     }
     private void OnLevelTransition(EventDefiner.LevelEnd _) { levelTransitioning = true; }
     private void OnLevelTransition(EventDefiner.MenuExit _) { levelTransitioning = true; }
-
-    //Since levels never start paused, enable the action map just to be sure.
-    private void Start()
-    {
-        if (inputActionFromMap != null)
-        {
-            inputActions = inputActionFromMap.action.actionMap;
-        }
-
-        if (inputActions != null)
-        {
-            inputActions.Enable();
-        }
-    }
-
-    private void OnPauseStateChange(EventDefiner.PauseStateChange evt)
-    {
-        //Whenever the pause state changes, if we have a reference to the action map,
-        if (inputActions != null)
-        {
-            //Disable the action map while paused, and enable it when not paused.
-            if (evt.Paused) { inputActions.Disable(); }
-            else { inputActions.Enable(); }
-        }
-    }
 
     /// <summary>
     /// Checks if an input is held using a callback context.

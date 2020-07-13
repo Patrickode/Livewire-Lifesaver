@@ -341,12 +341,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
         private void PerformInteractiveRebind(InputAction action, int bindingIndex, bool allCompositeParts = false)
         {
+            //While rebinding, disable the action so it can actually be rebound; an error is thrown when attempting
+            //to bind to an active action. The action is reenabled in CleanUp, i.e., if cancelled or completed.
+            action.Disable();
+
             m_RebindOperation?.Cancel(); // Will null out m_RebindOperation.
 
             void CleanUp()
             {
                 m_RebindOperation?.Dispose();
                 m_RebindOperation = null;
+                action.Enable();
             }
 
             // Configure the rebind.
