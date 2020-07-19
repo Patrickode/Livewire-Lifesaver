@@ -11,6 +11,7 @@ public class MenuButtons : MonoBehaviour
     private GameObject currentMenu = null;
     private GameObject defaultMenu = null;
     private GameObject selectAfterSwap = null;
+    private bool shouldFlashOnSwap = true;
 
     private EventSystem eventSyst = null;
     private EventSystem EventSyst
@@ -63,11 +64,13 @@ public class MenuButtons : MonoBehaviour
 
     public void SwapMenu(GameObject destination)
     {
-        SwapMenu(destination, true, selectAfterSwap);
+        SwapMenu(destination, shouldFlashOnSwap, selectAfterSwap);
         selectAfterSwap = null;
+        shouldFlashOnSwap = true;
     }
 
     public void SelectAfterSwap(GameObject objToSelect) { selectAfterSwap = objToSelect; }
+    public void DontFlashOnSwap() { shouldFlashOnSwap = false; }
 
     /// <summary>
     /// Swaps to another menu and sets the selection to the first selectable object in that menu.
