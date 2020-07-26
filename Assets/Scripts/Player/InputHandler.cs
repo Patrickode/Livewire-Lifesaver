@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+    [SerializeField] private PlayerInput playerInput = null;
+
     private bool jumpHeld = false;
     private bool boostHeld = false;
     private bool levelTransitioning = false;
@@ -21,6 +23,11 @@ public class InputHandler : MonoBehaviour
     }
     private void OnLevelTransition(EventDefiner.LevelEnd _) { levelTransitioning = true; }
     private void OnLevelTransition(EventDefiner.MenuExit _) { levelTransitioning = true; }
+
+    private void Start()
+    {
+        EventDispatcher.Dispatch(new EventDefiner.ControlSchemeChange(playerInput.currentControlScheme));
+    }
 
     /// <summary>
     /// Checks if an input is held using a callback context.
@@ -84,5 +91,10 @@ public class InputHandler : MonoBehaviour
         {
             EventDispatcher.Dispatch(new EventDefiner.PauseStateChange(!PauseHandler.Paused));
         }
+    }
+
+    public void OnControlSchemeChanged()
+    {
+        EventDispatcher.Dispatch(new EventDefiner.ControlSchemeChange(playerInput.currentControlScheme));
     }
 }

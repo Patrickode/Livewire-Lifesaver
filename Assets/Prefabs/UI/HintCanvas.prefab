@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8038781292822568068
 RectTransform:
   m_ObjectHideFlags: 0
@@ -530,6 +530,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hintPanel: {fileID: 8038781292822568068}
   hintText: {fileID: 8038781293803054571}
+  actionFromDesiredMap: {fileID: 2638608747944509624, guid: d14d626fb5e81a34a94d95669fdcbd80,
+    type: 3}
   panelMoveDuration: 0.75
   panelDisplayDuration: 5
   hintMessage: No message assigned. Assign a message in the editor.

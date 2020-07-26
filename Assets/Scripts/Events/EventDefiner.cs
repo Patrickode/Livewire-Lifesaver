@@ -92,4 +92,14 @@ public class EventDefiner : MonoBehaviour
             Paused = paused;
         }
     }
+
+    public class ControlSchemeChange : GenericEvent
+    {
+        public string ControlScheme { get; private set; }
+
+        public ControlSchemeChange(string controlScheme)
+        {
+            ControlScheme = controlScheme;
+        }
+    }
 }

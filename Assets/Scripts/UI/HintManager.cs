@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HintManager : MonoBehaviour
 {
     [SerializeField] private RectTransform hintPanel = null;
     [SerializeField] private TextMeshProUGUI hintText = null;
+
+    [Tooltip("An action from the map you want to reference. Any action from the map will work." +
+        "\n\nAs far as I know, getting a reference to an action map directly is impossible via the inspector.")]
+    [SerializeField] private InputActionReference actionFromDesiredMap = null;
+    private InputActionMap actionMap = null;
+    private Dictionary<string, InputAction> actionDict = null;
+    private string currentControlScheme = "";
 
     [Tooltip("How long it should take the panel to move in and out of place, in seconds.")]
     [SerializeField] [Range(0f, 2f)] private float panelMoveDuration = 0.5f;
@@ -15,14 +23,34 @@ public class HintManager : MonoBehaviour
     [SerializeField] [Range(0.1f, 10f)] private float panelDisplayDuration = 5f;
 
     [Tooltip("The message / hint that should be in the hint panel." +
-        "\n\nType the name of an action with a \"/\" on either side to show the binding for that action.")]
+        "\n\nType the name of an action with a | on either side to show the binding for that action.")]
     [SerializeField] [TextArea] private string hintMessage = "";
 
     private Vector2 originalPanelPos;
     private Vector2 offsetPanelPos;
 
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.ControlSchemeChange>(OnControlSchemeChange);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.ControlSchemeChange>(OnControlSchemeChange);
+    }
+    private void OnControlSchemeChange(EventDefiner.ControlSchemeChange evt)
+    {
+        currentControlScheme = evt.ControlScheme;
+    }
+
     void Start()
     {
+        actionMap = actionFromDesiredMap.action.actionMap;
+        actionDict = new Dictionary<string, InputAction>();
+        for (int i = 0; i < actionMap.actions.Count; i++)
+        {
+            actionDict.Add(actionMap.actions[i].name.ToLower(), actionMap.actions[i]);
+        }
+
         //Make note of the original position, and set an offset position one panel's worth to the left.
         originalPanelPos = hintPanel.anchoredPosition;
         offsetPanelPos = new Vector2
@@ -42,9 +70,54 @@ public class HintManager : MonoBehaviour
 
     private string FormatHintMessage(string message)
     {
-        message = message.Replace("/Move/", "the WASD keys");
-        message = message.Replace("/Swivel Camera/", "the Left / Right keys");
+        //Split the string using |, our template bar, for lack of a better term.
+        string[] splitMessage = message.Split('|');
+
+        //If the result has a length of 1, there are no bars.
+        if (splitMessage.Length <= 1)
+        {
+            return message;
+        }
+        //If it's got an even length, it's missing a bar somewhere.
+        else if (splitMessage.Length % 2 != 1)
+        {
+            Debug.LogWarning("HintManager: Hint message is missing a templating bar. Check the message " +
+                    "and fix the bar mismatch.");
+            return message;
+        }
+
+        //Now that we've checked for abnormalities, go through all the odd entries in splitMessage. These are the
+        //things to be formatted. Check for what action they represent and replace them with their bindings.
+        for (int i = 1; i < splitMessage.Length; i += 2)
+        {
+            string binding = GetBindingByName(splitMessage[i].ToLower());
+            if (binding != "")
+            {
+                splitMessage[i] = binding;
+            }
+        }
+
+        //We have the bindings, now format the bindings further.
+        message = string.Concat(splitMessage);
+        message = message.Replace(" | ", "/");
+
         return message;
+    }
+
+    private string GetBindingByName(string name)
+    {
+        //Check the dictionary to see if there's an action by the given name.
+        if (actionDict.TryGetValue(name, out InputAction action))
+        {
+            //If so, return a display string of said action's binding, using the current control scheme as a mask.
+            return action.GetBindingDisplayString
+            (
+                InputBinding.MaskByGroup(currentControlScheme),
+                InputBinding.DisplayStringOptions.DontIncludeInteractions
+            );
+        }
+
+        return "";
     }
 
     /// <summary>

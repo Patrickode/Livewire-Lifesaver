@@ -852,47 +852,57 @@ PrefabInstance:
     - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 0
+      value: 101
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 0
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038781293803054571, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293939545908, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293939545908, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293939545908, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8038781293939545908, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8038781293939545908, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 81.8
       objectReference: {fileID: 0}
     - target: {fileID: 8038781294087417580, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
@@ -1006,9 +1016,65 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
-      propertyPath: hintMessage
-      value: Press /Move/ to move, and press /Swivel Camera/ to turn the camera.
+      propertyPath: actionMap.m_Actions.Array.size
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Bindings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: hintMessage
+      value: Press |Move| to move, and press |Swivel Camera| to turn the camera.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Id
+      value: 4ef4801f-b735-49c9-bfe9-3fc1ba9179ff
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Name
+      value: Action Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Actions.Array.data[0].m_Name
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Actions.Array.data[0].m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Actions.Array.data[0].m_ExpectedControlType
+      value: Button
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Actions.Array.data[0].m_Id
+      value: 98a68f0e-4ff9-4e21-9ead-34020cdc33db
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Bindings.Array.data[0].m_Id
+      value: 87b7091e-550e-4f10-9f45-c035dbff19ec
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionMap.m_Bindings.Array.data[0].m_Action
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
+        type: 3}
+      propertyPath: actionAsset
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: d14d626fb5e81a34a94d95669fdcbd80,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43f270d69327cf84d944e9e796a7eba7, type: 3}
 --- !u!1 &796469364
