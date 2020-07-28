@@ -22,10 +22,13 @@ public class EventDefiner : MonoBehaviour
     public class MenuExit : GenericEvent
     {
         public int DestinationSceneIndex { get; private set; }
+        public float FadeOutDuration { get; private set; }
 
-        public MenuExit(int destinationSceneIndex)
+        public MenuExit(int destinationSceneIndex) : this(destinationSceneIndex, -1) { }
+        public MenuExit(int destinationSceneIndex, float fadeOutDuration)
         {
             DestinationSceneIndex = destinationSceneIndex;
+            FadeOutDuration = fadeOutDuration;
         }
     }
 

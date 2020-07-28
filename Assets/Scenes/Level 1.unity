@@ -535,6 +535,26 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1215902113341811555, guid: 7243f3be6810f78419b7200039285d28,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215902113341811555, guid: 7243f3be6810f78419b7200039285d28,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215902113341811555, guid: 7243f3be6810f78419b7200039285d28,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215902113341811555, guid: 7243f3be6810f78419b7200039285d28,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1789212912091438131, guid: 7243f3be6810f78419b7200039285d28,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1027,7 +1047,7 @@ PrefabInstance:
     - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
       propertyPath: hintMessage
-      value: Press |Move| to move, and press |Swivel Camera| to turn the camera.
+      value: Press |Move| to move, and press |Turn Camera| to turn the camera.
       objectReference: {fileID: 0}
     - target: {fileID: 8256681708840765383, guid: 43f270d69327cf84d944e9e796a7eba7,
         type: 3}
@@ -1800,7 +1820,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16420
+  m_Name: pb_Mesh14744
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

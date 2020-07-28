@@ -46,11 +46,16 @@ public class LevelTransitions : MonoBehaviour
 
     private void OnMenuExit(EventDefiner.MenuExit evt)
     {
-        StartCoroutine(LoadSceneAfterFade(evt.DestinationSceneIndex));
+        StartCoroutine(LoadSceneAfterFade(evt.DestinationSceneIndex, evt.FadeOutDuration));
     }
-    private IEnumerator LoadSceneAfterFade(int sceneIndex)
+    private IEnumerator LoadSceneAfterFade(int sceneIndex, float fadeDuration)
     {
-        yield return StartCoroutine(FadeBetween(Color.clear, Color.black, menuFadeOutTime));
+        yield return StartCoroutine(FadeBetween
+            (
+                Color.clear,
+                Color.black,
+                fadeDuration >= 0 ? fadeDuration : menuFadeOutTime
+            ));
         SceneManager.LoadScene(sceneIndex);
     }
 

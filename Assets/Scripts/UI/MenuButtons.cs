@@ -69,6 +69,11 @@ public class MenuButtons : MonoBehaviour
         shouldFlashOnSwap = true;
     }
 
+    public void RestartScene()
+    {
+        EventDispatcher.Dispatch(new EventDefiner.MenuExit(SceneManager.GetActiveScene().buildIndex, 0.35f));
+    }
+
     public void SelectAfterSwap(GameObject objToSelect) { selectAfterSwap = objToSelect; }
     public void DontFlashOnSwap() { shouldFlashOnSwap = false; }
 

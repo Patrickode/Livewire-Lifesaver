@@ -22,7 +22,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Swivel Camera",
+                    "name": "Turn Camera",
                     "type": "Value",
                     "id": "93aefb34-d025-48c6-a22a-02c51eba1e59",
                     "expectedControlType": "Axis",
@@ -120,7 +120,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Swivel Camera",
+                    "action": "Turn Camera",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -131,7 +131,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Swivel Camera",
+                    "action": "Turn Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -142,7 +142,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Swivel Camera",
+                    "action": "Turn Camera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -153,7 +153,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Swivel Camera",
+                    "action": "Turn Camera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
