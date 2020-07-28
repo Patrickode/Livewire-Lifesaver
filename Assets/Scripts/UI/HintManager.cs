@@ -40,6 +40,10 @@ public class HintManager : MonoBehaviour
     private void OnControlSchemeChange(EventDefiner.ControlSchemeChange evt)
     {
         currentControlScheme = evt.ControlScheme;
+        if (hintText.gameObject.activeInHierarchy)
+        {
+            hintText.text = FormatHintMessage(hintMessage);
+        }
     }
 
     void Start()
