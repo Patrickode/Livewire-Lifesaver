@@ -56,7 +56,17 @@ public class MenuButtons : MonoBehaviour
         if (!evt.Paused && currentMenu != defaultMenu) { SwapMenu(defaultMenu, false); }
     }
 
-    public void LoadScene(int index) { EventDispatcher.Dispatch(new EventDefiner.MenuExit(index)); }
+    /// <summary>
+    /// Loads a scene by its index. If <paramref name="index"/> is negative, this method will load the scene
+    /// with the index "currentSceneIndex - <paramref name="index"/>," or 
+    /// "currentSceneIndex + |<paramref name="index"/>|."
+    /// </summary>
+    /// <param name="index">The index of the scene to load.</param>
+    public void LoadScene(int index)
+    {
+        int indexToLoad = index >= 0 ? index : SceneManager.GetActiveScene().buildIndex - index;
+        EventDispatcher.Dispatch(new EventDefiner.MenuExit(indexToLoad));
+    }
 
     public void QuitGame() { Application.Quit(); }
 
