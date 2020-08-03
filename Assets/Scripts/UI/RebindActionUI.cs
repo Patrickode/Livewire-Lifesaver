@@ -231,6 +231,12 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
 #endif
 
+        private void Start()
+        {
+            UpdateActionLabel();
+            UpdateBindingDisplay();
+        }
+
         private void UpdateActionLabel()
         {
             if (m_ActionLabel != null)

@@ -34,7 +34,7 @@ EditorBuildSettings:
     guid: 7936334aade28c44687f9c50eaa035a4
   - enabled: 1
     path: Assets/Scenes/EndScreen.unity
-    guid: f89df4993d1c67348ba2e047876e9faf
+    guid: ada89eb43aa970946a9384cb669cbe6f
   - enabled: 1
     path: Assets/Scenes/TestScene.unity
     guid: 2916cce384e28d5498c94fccfd06d675

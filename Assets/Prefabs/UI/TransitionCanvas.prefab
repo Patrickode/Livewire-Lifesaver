@@ -595,7 +595,7 @@ MonoBehaviour:
   panelAnimTime: 1
   fadeInTime: 0.25
   levelFadeOutTime: 2.5
-  menuFadeOutTime: 1.25
+  menuFadeOutTime: 1
   winPanel: {fileID: 6347061573716932593}
   losePanel: {fileID: 1232089365220625103}
   fadePanel: {fileID: 391788499533522360}
