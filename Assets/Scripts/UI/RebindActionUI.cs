@@ -314,10 +314,16 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             {
                 // It's a composite. Remove overrides from part bindings.
                 for (var i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; ++i)
+                {
+                    //Save the binding before removing it, so we can .Except() it from the saved array of overrides.
+                    SaveNewBinding(action, i, true);
                     action.RemoveBindingOverride(i);
+                }
             }
             else
             {
+                //Save the binding before removing it, so we can .Except() it from the saved array of overrides.
+                SaveNewBinding(action, bindingIndex, true);
                 action.RemoveBindingOverride(bindingIndex);
             }
             UpdateBindingDisplay();
@@ -377,6 +383,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                         m_RebindStopEvent?.Invoke(this, operation);
                         UpdateBindingDisplay();
                         CleanUp();
+
+                        SaveNewBinding(action, bindingIndex);
 
                         // If there's more composite parts we should bind, initiate a rebind
                         // for the next part.
@@ -470,6 +478,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                     referencedAction.actionMap?.asset == actionAsset)
                     component.UpdateBindingDisplay();
             }
+        }
+
+        private void SaveNewBinding(InputAction action, int bindingIndex, bool removeBinding = false)
+        {
+            //Get the index of this action and the new path of the binding.
+            int actionIndex = action.actionMap.actions.IndexOf(act => act == action);
+            string path = action.bindings[bindingIndex].overridePath;
+
+            //Save that info to a BindingOverride and save that to a file.
+            BindingOverride @override = new BindingOverride(actionIndex, bindingIndex, path);
+            SaveManager.SaveDataToFile(new[] { @override }, removeBinding);
         }
         #endregion
     }
