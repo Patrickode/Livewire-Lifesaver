@@ -64,7 +64,26 @@ public class MenuButtons : MonoBehaviour
     /// <param name="index">The index of the scene to load.</param>
     public void LoadScene(int index)
     {
+        //If index is positive or zero, simply use index. Otherwise, go forward by that many indices.
         int indexToLoad = index >= 0 ? index : SceneManager.GetActiveScene().buildIndex - index;
+        EventDispatcher.Dispatch(new EventDefiner.MenuExit(indexToLoad));
+    }
+
+    /// <summary>
+    /// Continue from where the player left off. Loads the last completed level and adds one to it.
+    /// </summary>
+    public void ContinueGame()
+    {
+        //Load the scene after the last completed level...
+        int indexToLoad = SaveManager.CachedData.LastCompletedIndex + 1;
+
+        //...unless that scene is the end screen. This is pretty flimsy, but I can't think of a
+        //way to make it better yet.
+        if (indexToLoad >= SceneManager.sceneCountInBuildSettings - 2)
+        {
+            indexToLoad--;
+        }
+
         EventDispatcher.Dispatch(new EventDefiner.MenuExit(indexToLoad));
     }
 
