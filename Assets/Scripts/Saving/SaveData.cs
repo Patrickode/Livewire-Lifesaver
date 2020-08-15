@@ -39,15 +39,14 @@ public class SaveData
     /// <summary>
     /// The last level the player played. Determines what levels
     /// </summary>
-    public int HighestCompletedIndex { get; private set; }
+    public int LastCompletedIndex { get; private set; }
     public int[] CollectedBoltIndices { get; private set; }
-    //Use actionMap.actions[actionIndex].ApplyBindingOverride(bindingIndex, path) to reapply
     public BindingOverride[] BindingOverrides { get; private set; }
     //public (int actionIndex, int bindingIndex, string path)[] BindingOverrides { get; private set; }
 
-    public SaveData(int highestCompletedIndex, int[] collectedBoltIndices, BindingOverride[] bindingOverrides)
+    public SaveData(int lastCompletedIndex, int[] collectedBoltIndices, BindingOverride[] bindingOverrides)
     {
-        HighestCompletedIndex = highestCompletedIndex;
+        LastCompletedIndex = lastCompletedIndex;
         CollectedBoltIndices = collectedBoltIndices;
         BindingOverrides = bindingOverrides;
     }

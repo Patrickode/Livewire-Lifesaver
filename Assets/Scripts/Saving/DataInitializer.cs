@@ -21,7 +21,7 @@ public class DataInitializer : MonoBehaviour
         SaveData loadedData = SaveManager.CachedData;
 
         //If the player has completed a level, make the startButton say "Continue" instead.
-        if (loadedData.HighestCompletedIndex > 0)
+        if (loadedData.LastCompletedIndex > 0)
         {
             startButtonText.text = "Continue";
         }

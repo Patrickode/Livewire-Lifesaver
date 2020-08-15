@@ -47,6 +47,9 @@ public static class SaveManager
 
         //Cache the newly saved data to ensure the cache is up to date.
         CachedData = dataToSave;
+
+        //Saving has completed, dispatch an event saying so.
+        EventDispatcher.Dispatch(new EventDefiner.SaveToFile(true));
     }
     /// <summary>
     /// Save completed level data.
@@ -55,15 +58,18 @@ public static class SaveManager
     /// <param name="boltCollected">Whether a bolt was collected in the level or not.</param>
     public static void SaveDataToFile(int completedIndex, bool boltCollected = false)
     {
+        //Saving has started and is not complete; dispatch an event saying so.
+        EventDispatcher.Dispatch(new EventDefiner.SaveToFile(false));
+
         //Get the current values for HighestCompletedIndex and CollectedBoltIndices.
-        int highIndexToSave = CachedData.HighestCompletedIndex;
+        int indexToSave = CachedData.LastCompletedIndex;
         int[] collectedIndicesToSave = CachedData.CollectedBoltIndices;
 
         //We only need to save if something changed. If nothing changed, just do nothing.
-        if (completedIndex > highIndexToSave || boltCollected)
+        if (completedIndex > indexToSave || boltCollected)
         {
             //Check if the completedIndex is higher than the cached one; if so, overwrite it
-            highIndexToSave = completedIndex > highIndexToSave ? completedIndex : highIndexToSave;
+            indexToSave = completedIndex > indexToSave ? completedIndex : indexToSave;
 
             //If a bolt was collected, add it to the array of collected bolts.
             if (boltCollected)
@@ -72,8 +78,10 @@ public static class SaveManager
                 collectedIndicesToSave = collectedIndicesToSave.Union(newIndex).ToArray();
             }
 
-            SaveDataToFile(highIndexToSave, collectedIndicesToSave, CachedData.BindingOverrides);
+            SaveDataToFile(indexToSave, collectedIndicesToSave, CachedData.BindingOverrides);
         }
+        //Since there's nothing to save if we got here, the save is complete.
+        else { EventDispatcher.Dispatch(new EventDefiner.SaveToFile(true)); }
     }
     /// <summary>
     /// Save binding related data.
@@ -83,6 +91,9 @@ public static class SaveManager
     /// array of overrides or not.</param>
     public static void SaveDataToFile(BindingOverride[] bindingOverrides, bool removePassedBindings = false)
     {
+        //Saving has started and is not complete; dispatch an event saying so.
+        EventDispatcher.Dispatch(new EventDefiner.SaveToFile(false));
+
         //Set up an array to put the updated array of overrides in, so we can save it.
         BindingOverride[] updatedOverrides = null;
 
@@ -96,7 +107,7 @@ public static class SaveManager
             updatedOverrides = CachedData.BindingOverrides.Union(bindingOverrides).ToArray();
         }
 
-        SaveDataToFile(CachedData.HighestCompletedIndex, CachedData.CollectedBoltIndices, updatedOverrides);
+        SaveDataToFile(CachedData.LastCompletedIndex, CachedData.CollectedBoltIndices, updatedOverrides);
     }
 
     /// <summary>

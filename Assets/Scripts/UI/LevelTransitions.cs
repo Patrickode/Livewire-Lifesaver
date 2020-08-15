@@ -18,12 +18,14 @@ public class LevelTransitions : MonoBehaviour
 
     private bool isFading = false;
     private bool showingPanel = false;
+    private bool loadAllowed = true;
 
     private void Awake()
     {
         EventDispatcher.AddListener<EventDefiner.LevelEnd>(OnLevelEnd);
         EventDispatcher.AddListener<EventDefiner.MenuExit>(OnMenuExit);
         EventDispatcher.AddListener<EventDefiner.MenuSwap>(OnMenuSwap);
+        EventDispatcher.AddListener<EventDefiner.SaveToFile>(OnSaveToFile);
     }
 
     private void OnDestroy()
@@ -31,6 +33,7 @@ public class LevelTransitions : MonoBehaviour
         EventDispatcher.RemoveListener<EventDefiner.LevelEnd>(OnLevelEnd);
         EventDispatcher.RemoveListener<EventDefiner.MenuExit>(OnMenuExit);
         EventDispatcher.RemoveListener<EventDefiner.MenuSwap>(OnMenuSwap);
+        EventDispatcher.RemoveListener<EventDefiner.SaveToFile>(OnSaveToFile);
     }
 
     private void Start()
@@ -56,7 +59,7 @@ public class LevelTransitions : MonoBehaviour
                 Color.black,
                 fadeDuration >= 0 ? fadeDuration : menuFadeOutTime
             ));
-        SceneManager.LoadScene(sceneIndex);
+        StartCoroutine(LoadWhenAllowed(sceneIndex));
     }
 
     private void OnMenuSwap(EventDefiner.MenuSwap evt)
@@ -66,6 +69,8 @@ public class LevelTransitions : MonoBehaviour
             StartCoroutine(FadeBetween(Color.white, new Color(1, 1, 1, 0), fadeInTime));
         }
     }
+
+    private void OnSaveToFile(EventDefiner.SaveToFile evt) { loadAllowed = evt.SaveCompleted; }
 
     /// <summary>
     /// Moves the win or loss panel up as part of level transition.
@@ -103,7 +108,7 @@ public class LevelTransitions : MonoBehaviour
         }
 
         //Wait until the screen is done fading out to continue.
-        yield return new WaitUntil(() => isFading == false);
+        yield return new WaitUntil(() => !isFading);
 
         //We're done showing the panel, so prepare to move it offscreen, in the same direction it came in.
         offsetPos = new Vector2(originalPos.x, originalPos.y + Screen.height);
@@ -123,11 +128,11 @@ public class LevelTransitions : MonoBehaviour
         //Finally, now that all the transitioning is done, load the appropriate scene.
         if (levelSuccess)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            StartCoroutine(LoadWhenAllowed(SceneManager.GetActiveScene().buildIndex + 1));
         }
         else
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            StartCoroutine(LoadWhenAllowed(SceneManager.GetActiveScene().buildIndex));
         }
     }
 
@@ -174,5 +179,11 @@ public class LevelTransitions : MonoBehaviour
     {
         yield return StartCoroutine(FadeBetween(fromColor1, toColor1, fadeTime1));
         StartCoroutine(FadeBetween(fromColor2, toColor2, fadeTime2));
+    }
+
+    private IEnumerator LoadWhenAllowed(int indexToLoad)
+    {
+        yield return new WaitUntil(() => loadAllowed == true);
+        SceneManager.LoadScene(indexToLoad);
     }
 }

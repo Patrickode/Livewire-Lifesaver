@@ -105,4 +105,14 @@ public class EventDefiner : MonoBehaviour
             ControlScheme = controlScheme;
         }
     }
+
+    public class SaveToFile : GenericEvent
+    {
+        public bool SaveCompleted { get; private set; }
+
+        public SaveToFile(bool saveCompleted)
+        {
+            SaveCompleted = saveCompleted;
+        }
+    }
 }
