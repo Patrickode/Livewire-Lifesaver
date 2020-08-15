@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SaveOnClear : MonoBehaviour
 {
     [SerializeField] private GameObject goldBolt = null;
+    private bool levelEnding = false;
 
 #if UNITY_EDITOR
     [Header("Cached Save Data")]
@@ -35,6 +36,10 @@ public class SaveOnClear : MonoBehaviour
 
     private void OnLevelEnd(EventDefiner.LevelEnd evt)
     {
+        //Ensure this method only fires once, so we don't save a success if the player fails first.
+        if (levelEnding) { return; }
+        levelEnding = true;
+
         //If the level was cleared,
         if (evt.LevelSuccess)
         {
