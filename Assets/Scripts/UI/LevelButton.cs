@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 #if UNITY_EDITOR
+using TMPro;
 using UnityEngine.InputSystem;
 #endif
 
-public class UnlockLevel : MonoBehaviour
+public class LevelButton : MonoBehaviour
 {
     [SerializeField] private Button button = null;
     [SerializeField] private RawImage boltIcon = null;
@@ -20,12 +21,19 @@ public class UnlockLevel : MonoBehaviour
 
 #if UNITY_EDITOR
     [SerializeField] private bool toggleBoltIcon = false;
+    [Space(10)]
+    [SerializeField] private TextMeshProUGUI autoUpdateText = null;
     private void OnValidate()
     {
         if (toggleBoltIcon && boltIcon)
         {
             boltIcon.gameObject.SetActive(!boltIcon.gameObject.activeSelf);
             toggleBoltIcon = false;
+        }
+
+        if (autoUpdateText)
+        {
+            autoUpdateText.text = index.ToString();
         }
     }
 #endif
@@ -53,6 +61,11 @@ public class UnlockLevel : MonoBehaviour
             boltIcon.texture = emptyIcon;
         }
     }
+
+    /// <summary>
+    /// Performs the same functionality as MenuButtons's "LoadScene()," but with this button's index.
+    /// </summary>
+    public void LoadThisLevel() { EventDispatcher.Dispatch(new EventDefiner.MenuExit(index)); }
 
 #if UNITY_EDITOR
     private void Update()
