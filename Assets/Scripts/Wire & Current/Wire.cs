@@ -18,8 +18,8 @@ public class Wire : MonoBehaviour
     //This is used to circumvent enigmatic, irrelevant warnings in the console about SendMessage,
     //which is clearly never used in this segment.
     //Gotten from https://forum.unity.com/threads/sendmessage-cannot-be-called-during-awake-checkconsistency-or-onvalidate-can-we-suppress.537265/#post-5560519
-    void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
-    private void _OnValidate()
+    void OnValidate() { UnityEditor.EditorApplication.delayCall += OnOnValidate; }
+    private void OnOnValidate()
     {
         if (this == null) { return; }
 
