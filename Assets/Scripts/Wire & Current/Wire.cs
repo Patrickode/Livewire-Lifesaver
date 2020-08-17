@@ -13,7 +13,8 @@ public class Wire : MonoBehaviour
 #if UNITY_EDITOR
     [Header("Auto-Add Corner Cap")]
     [SerializeField] private GameObject cornerCap = null;
-    [SerializeField] private bool addCornerCap = false;
+    [SerializeField] private bool toggleCornerCap = false;
+    private GameObject cachedCap = null;
 
     //This is used to circumvent enigmatic, irrelevant warnings in the console about SendMessage,
     //which is clearly never used in this segment.
@@ -23,19 +24,30 @@ public class Wire : MonoBehaviour
     {
         if (this == null) { return; }
 
-        if (cornerCap && addCornerCap)
+        if (cornerCap && toggleCornerCap)
         {
-            //Instantiate a corner cap and set it to the right size / position
-            GameObject addedCap = Instantiate(cornerCap, gameObject.transform);
-            addedCap.transform.localScale = new Vector3
-            (
-                addedCap.transform.localScale.x / transform.localScale.x,
-                addedCap.transform.localScale.y / transform.localScale.y,
-                addedCap.transform.localScale.z / transform.localScale.z
-            );
-            addedCap.transform.localPosition = new Vector3(0, 0, 0.5f);
+            if (!cachedCap)
+            {
+                //Instantiate a corner cap and set it to the right size / position
+                GameObject addedCap = Instantiate(cornerCap, gameObject.transform);
+                addedCap.transform.localScale = new Vector3
+                (
+                    addedCap.transform.localScale.x / transform.localScale.x,
+                    addedCap.transform.localScale.y / transform.localScale.y,
+                    addedCap.transform.localScale.z / transform.localScale.z
+                );
+                addedCap.transform.localPosition = new Vector3(0, 0, 0.5f);
 
-            addCornerCap = false;
+                cachedCap = addedCap;
+            }
+            else
+            {
+                //If we have a cap cached, destroy it and set cachedCap to null just to be safe.
+                DestroyImmediate(cachedCap, false);
+                cachedCap = null;
+            }
+
+            toggleCornerCap = false;
         }
     }
 #endif
