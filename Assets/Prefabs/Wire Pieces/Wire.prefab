@@ -143,6 +143,9 @@ MonoBehaviour:
   trigger: {fileID: 0}
   type: 0
   playerClose: 0
+  cornerCap: {fileID: 1238916516244919467, guid: 3ae09d0d67002764c80aa0ced6f96929,
+    type: 3}
+  addCornerCap: 0
 --- !u!1 &3072967543001233322
 GameObject:
   m_ObjectHideFlags: 0
