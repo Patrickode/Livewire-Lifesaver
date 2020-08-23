@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111567cb267d55e46a06fb5624a61b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bobDistance: 0.1
+  bobDistance: 0.15
   bobSpeed: 1.5
   spinSpeed: 25
 --- !u!114 &-4027348632398474278

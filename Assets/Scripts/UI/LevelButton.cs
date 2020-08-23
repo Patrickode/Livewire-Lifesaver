@@ -16,12 +16,11 @@ public class LevelButton : MonoBehaviour
     [SerializeField] private Texture filledIcon = null;
     [Space(10)]
     [SerializeField] private int index = -1;
-    [Space(10)]
     [SerializeField] private bool levelHasBolt = false;
 
 #if UNITY_EDITOR
+    [Header("Editor Only")]
     [SerializeField] private bool toggleBoltIcon = false;
-    [Space(10)]
     [SerializeField] private TextMeshProUGUI autoUpdateText = null;
     private void OnValidate()
     {
