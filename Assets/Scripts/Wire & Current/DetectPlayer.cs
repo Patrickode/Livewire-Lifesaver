@@ -46,8 +46,9 @@ public class DetectPlayer : MonoBehaviour
         //Make sure the line is only seen when the player is close.
         line.enabled = parentWire.playerClose;
 
-        //If the player is close, and we have a reference to the player (we should, see on trigger enter),
-        if (parentWire.playerClose && player)
+        //If the player is close, we have a reference to the player (we should, see on trigger enter),
+        //and the game isn't paused,
+        if (parentWire.playerClose && player && Time.timeScale > 0)
         {
             //update the end position to be the player's position.
             linePos[line.positionCount - 1] = player.position;

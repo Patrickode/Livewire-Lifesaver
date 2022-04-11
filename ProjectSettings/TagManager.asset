@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Orienter
   - Current
+  - Menu
+  - Waypoint
+  - Corner Cap
   layers:
   - Default
   - TransparentFX

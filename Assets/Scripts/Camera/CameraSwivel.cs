@@ -7,15 +7,27 @@ public class CameraSwivel : MonoBehaviour
     [SerializeField]
     private float rotateSpeed = 1;
 
+    private float currentSwivelAxis;
+
+    private void Awake()
+    {
+        EventDispatcher.AddListener<EventDefiner.SwivelInput>(GetSwivelInput);
+    }
+    private void OnDestroy()
+    {
+        EventDispatcher.RemoveListener<EventDefiner.SwivelInput>(GetSwivelInput);
+    }
+
+    private void GetSwivelInput(EventDefiner.SwivelInput evt)
+    {
+        currentSwivelAxis = evt.Magnitude;
+    }
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (!Mathf.Approximately(currentSwivelAxis, 0))
         {
-            transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
+            transform.Rotate(0, rotateSpeed * currentSwivelAxis * Time.deltaTime, 0);
         }
     }
 }

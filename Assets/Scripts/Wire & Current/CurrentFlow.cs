@@ -30,11 +30,11 @@ public class CurrentFlow : MonoBehaviour
 
     private void Awake()
     {
-        EventDispatcher.AddListener<EventDefiner.CurrentBoost>(OnCurrentBoost);
+        EventDispatcher.AddListener<EventDefiner.BoostInput>(GetBoostInput);
     }
     private void OnDestroy()
     {
-        EventDispatcher.RemoveListener<EventDefiner.CurrentBoost>(OnCurrentBoost);
+        EventDispatcher.RemoveListener<EventDefiner.BoostInput>(GetBoostInput);
     }
 
     void Start()
@@ -196,8 +196,20 @@ public class CurrentFlow : MonoBehaviour
         {
             Debug.LogWarning("CurrentFlow: Burst prefab was not assigned; cannot do current burst.");
         }
+
         Destroy(gameObject);
     }
 
-    private void OnCurrentBoost(EventDefiner.CurrentBoost evt) { boosting = evt.Boosting; }
+    private void GetBoostInput(EventDefiner.BoostInput evt)
+    {
+        //If boost input was pressed, start boosting, and stop boosting once it's released.
+        if (evt.PressedThisFrame)
+        {
+            boosting = true;
+        }
+        else if (!evt.IsHeld)
+        {
+            boosting = false;
+        }
+    }
 }
